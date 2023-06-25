@@ -25,7 +25,7 @@ class controllerGeneral {
         }
 
     public function InscripcionPorCurso($cod_est,$cod_cur,$periodo,$year){
-        $this->model->InscribirEstudiante($cod_est,$cod_cur,$periodo,$year);
+        $this->model->InscribirEstudiante($cod_est,$cod_cur,$periodo,$year) ;
         header('Location: /app/views/inscripcion.php'); 
     }
 

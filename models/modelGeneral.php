@@ -59,15 +59,33 @@ class modelGeneral {
 
     public function InscribirEstudiante($cod_est,$cod_cur,$periodo,$anio){
         try {
-            
-            $query = "INSERT INTO inscripciones(cod_insc,periodo,year,cod_cur,cod_est) values ($periodo, $anio, $cod_cur,$cod_est)";
-            $stmt = $this->conn->prepare($query);
-            
-            return $stmt->execute();
+            if($this->checkInscripcion($cod_est,$cod_cur,$periodo,$anio))
+            {
+                $query = "INSERT INTO inscripciones(periodo,year,cod_cur,cod_est) values ($periodo, $anio, $cod_cur,$cod_est)";
+                $stmt = $this->conn->prepare($query);    
+                return $stmt->execute();
+            }
         }
         catch (PDOException $exception){
             return 'Error: ' . $exception->getMessage();
         }
+
+    }
+
+    public function checkInscripcion($cod_est,$cod_cur,$periodo,$anio){
+
+        $query = $this->conn->query("select count(*) from inscripciones where cod_est = $cod_est and cod_cur = $cod_cur and periodo = $periodo and year = $anio");
+        
+        foreach($query as $row){
+            $count = $row[0];
+        }
+
+        if ($count == 0) {
+            return true;
+        } else {
+            return false;
+        }
+        
 
     }
 
