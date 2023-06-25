@@ -8,10 +8,6 @@ require_once "../controllers/controllerGeneral.php";
     $date = getdate();
     echo"<p>".$date['mday']."/".$date['month']."/".$date['year']."</p>";
 
-    /*
-    $nomb_cur = $obj->get_nomb_cur($cod_cur);
-    echo "curso: ".$nomb_cur."<br><br>";
-    */
     $estudiantes = $obj->getEstudiantes($_POST['cod_cur'],$_POST['year'],$_POST['periodo']);
     
 ?>
@@ -134,15 +130,14 @@ require_once "../controllers/controllerGeneral.php";
 <body>
   <div class="sidebar">
     <div class="sidebar-header">
-      <h2>Menú</h2>
+      <h2>Registro<br>de Notas<br><?php $date = getdate(); echo"<p>".$date['mday']."/".$date['month']."/".$date['year']."</p>";?></h2>
     </div>
     <ul class="menu">
-      <li><a href="/app/views/SelectCurso.php"><i class="fa-solid fa-sitemap"></i></i>  Seleccionar Curso</a></li>
-      <li><a href="/app/views/inscripcion.php"><i class="fa-solid fa-plus"></i>  Inscripcion de estudiantes</a></li>
-      <li><a href="/app/views/pagina_registro_Est.php"><i class="fa-solid fa-plus"></i>  Registro de estudiantes</a></li>
-      <li><a href="/app/views/pagina_planeacion.php"><i class="fa-solid fa-clipboard"></i>  Planeacion</a></li>
-      <li><a href="/app/views/pagina_calificaciones.php"><i class="fa-solid fa-plus"></i>  Calificaciones</a></li>
-      <li><a href="#"><i class="fa-solid fa-clipboard"></i>  Reporte</a></li>
+      <li><a href="/app/views/SelectCurso.php"><i class="fa-solid fa-sitemap"></i></i>  Listados</a></li>
+      <li><a href="/app/views/inscripcion.php"><i class="fa-solid fa-plus"></i>  Inscripcion</a></li>
+      <li><a href="/app/views/registro.php"><i class="fa-solid fa-plus"></i>  Registro</a></li>
+      <li><a href="/app/views/planeacion.php"><i class="fa-solid fa-clipboard"></i>  Notas</a></li>
+      <li><a href="/app/views/reporte.php"><i class="fa-solid fa-clipboard"></i>  Reporte</a></li>
     </ul>
   </div>
 
@@ -166,7 +161,7 @@ require_once "../controllers/controllerGeneral.php";
       <?php foreach($estudiantes as $estu):?>
       <tr> <td><?=$estu[0]?></td>
        <td><?=$estu[1]?></td>
-       <td><form action="eliminar.php" method="POST">
+       <td><form action="eliminarEstudiante.php" method="POST">
           <input type="hidden" name="cod_est" value="<?=$estu[0]?>">
       <center><button type="submit" style="padding-top:15px; border: none; background: none;"><i class="fa-solid fa-delete-left fa-2xl" style="color: #d91717;"></i></button></center>
         </form></td></tr> 
