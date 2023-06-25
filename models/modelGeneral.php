@@ -128,7 +128,7 @@ class modelGeneral {
 
     public function agregarNota($cod_cur,$descrip_nota,$porcentaje,$posicion){
         try {
-                $query = "INSERT INTO nota(cod_cur,descrip_nota,porcentaje,posicion) values ($cod_cur,'$descrip_nota',$porcentaje,$posicion);";
+                $query = "INSERT INTO notas(cod_cur,descrip_nota,porcentaje,posicion) values ($cod_cur,'$descrip_nota',$porcentaje,$posicion);";
                 $stmt = $this->conn->prepare($query);    
                 return $stmt->execute();
         }
@@ -136,6 +136,21 @@ class modelGeneral {
             return 'Error: ' . $exception->getMessage();
         }
 
+    }
+
+    public function validarPosicion($cod_cur,$posicion){
+
+        $query = $this->conn->query("select count(*) from notas where cod_cur = $cod_cur and posicion = $posicion;");
+        
+        foreach($query as $row){
+            $count = $row[0];
+        }
+
+        if ($count == 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

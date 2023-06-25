@@ -206,13 +206,22 @@ require_once "../controllers/controllerGeneral.php";
 <?php if(isset($_POST['submit'])):?>
 <?php 
 
-if ($obj->validarPorcentaje($_POST['porcentaje']*0.01,$_POST['cod_cur']) && strlen($_POST['descripcion'])<=20 ) {
+if ($obj->validarPorcentaje($_POST['porcentaje']*0.01,$_POST['cod_cur']) && strlen($_POST['descripcion'])<=20 && $obj->validarPosicion($_POST['cod_cur'],$_POST['posicion']) ) {
 
     $obj->agregarNota($_POST['cod_cur'],$_POST['descripcion'],$_POST['porcentaje']*0.01,$_POST['posicion']);
     echo"Registro Exitoso!";
 }
-else {
-    echo  "Los datos son incorrectos, ingreselos nuevamente por favor";
+else if ($obj->validarPorcentaje($_POST['porcentaje']*0.01,$_POST['cod_cur']) == false) {
+  echo  "El porcentaje total es mayor al 100%, ingrese los datos nuevamente por favor";
+}
+else if (strlen($_POST['descripcion']) > 20) {
+  echo  "La descripcion es muy larga, ingrese los datos nuevamente por favor";
+}
+else if ($obj->validarPosicion($_POST['cod_cur'],$_POST['posicion']) == false) {
+  echo  "La posicion ingresada ya está tomada, ingrese los datos nuevamente por favor";
+}
+else{
+  echo  "Los datos son incorrectos, ingreselos nuevamente por favor";
 }
 
 

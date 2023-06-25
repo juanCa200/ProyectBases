@@ -54,16 +54,17 @@ class controllerGeneral {
     
     public function validarPorcentaje($porcentaje,$cod_cur) {
         return ($this->model->validarPorcentaje($porcentaje,$cod_cur)) ? $this->model->validarPorcentaje($porcentaje,$cod_cur): false;
-        }
-    
-    
-    public function agregarNota($cod_cur,$descrip_nota,$porcentaje,$posicion){
-        return $this->model->agregarNota($cod_cur,$descrip_nota,$porcentaje,$posicion) ? $this->model->agregarNota($cod_cur,$descrip_nota,$porcentaje,$posicion): false;
     }
     
     
-    
-        
+    public function agregarNota($cod_cur,$descrip_nota,$porcentaje,$posicion){
+        $this->model->agregarNota($cod_cur,$descrip_nota,$porcentaje,$posicion);
+    }
 
+    public function validarPosicion($cod_cur,$posicion){
+        return ($this->model->validarPosicion($cod_cur,$posicion)) ? $this->model->validarPosicion($cod_cur,$posicion): false;
+    }
+
+    
 }
 ?>
