@@ -21,9 +21,8 @@ class modelGeneral {
 
     public function eliminarEstudiantes($cod_est) {
         // Preparar la consulta de inserción
-        $query = "DELETE FROM inscripciones WHERE cod_est = :cod_est";
+        $query = "DELETE FROM inscripciones WHERE cod_est = '$cod_est'";
         $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':cod_est', $cod_est);
         return $stmt->execute();
     }
 
@@ -48,21 +47,22 @@ class modelGeneral {
 
     public function getEstudiantes($cod_cur,$year,$periodo){
 
-        $query = "SELECT i.cod_est, e.nomb_est FROM inscripciones i join estudiantes e on i.cod_est = e.cod_est where cod_cur = $cod_cur and year = $year and periodo = $periodo";
-        $stmt = $this->conn->prepare($query);
-        return($stmt->execute()) ? $stmt->fetchAll(): false;
+        if ($cod_cur && $year && $periodo) {
+            $query = "SELECT i.cod_est, e.nomb_est FROM inscripciones i join estudiantes e on i.cod_est = e.cod_est where cod_cur = $cod_cur and year = $year and periodo = $periodo";
+            $stmt = $this->conn->prepare($query);
+            return($stmt->execute()) ? $stmt->fetchAll(): false;
+        }else {
+            return 0;
+        }
+        
     }
 
     public function InscribirEstudiante($cod_est,$cod_cur,$periodo,$anio){
         try {
-            $cod_insc =1;
-            $query = "INSERT INTO inscripciones(cod_insc,periodo,year,cod_cur,cod_est) values (:cod_insc,:periodo, :anio, :cod_cur,:cod_est)";
+            
+            $query = "INSERT INTO inscripciones(cod_insc,periodo,year,cod_cur,cod_est) values ($periodo, $anio, $cod_cur,$cod_est)";
             $stmt = $this->conn->prepare($query);
-            $stmt->bindParam(':cod_est', $cod_est);
-            $stmt->bindParam(':cod_cur', $cod_cur);
-            $stmt->bindParam(':periodo', $periodo);
-            $stmt->bindParam(':anio', $anio);
-            $stmt->bindParam(':cod_insc', $cod_insc);
+            
             return $stmt->execute();
         }
         catch (PDOException $exception){
