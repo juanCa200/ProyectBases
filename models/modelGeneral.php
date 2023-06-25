@@ -57,6 +57,19 @@ class modelGeneral {
         
     }
 
+    public function getPlaneacion($cod_cur){
+
+        if ($cod_cur) {
+            $query = "SELECT posicion,nota,porcentaje FROM notas where cod_cur = $cod_cur ";
+            $stmt = $this->conn->prepare($query);
+            return($stmt->execute()) ? $stmt->fetchAll(): false;
+        }else {
+            return 0;
+        }
+        
+    }
+    
+
     public function InscribirEstudiante($cod_est,$cod_cur,$periodo,$anio){
         try {
             if($this->checkInscripcion($cod_est,$cod_cur,$periodo,$anio))
@@ -85,8 +98,6 @@ class modelGeneral {
         } else {
             return false;
         }
-        
-
     }
 
     public function get_nomb_cur($cod_cur){

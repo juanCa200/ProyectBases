@@ -1,9 +1,12 @@
-
-
 <?php
 require_once "../controllers/controllerGeneral.php";
     $obj=new controllerGeneral();
-    $date=$obj->getAllcursos();    
+
+    #faltan cosas por agregar aqui, ningun boton es funcional aun, si tiene dudas de como funciona el if isset
+    #me escribe, los botones redireccionan a paginas que aun no existen, lo del registro de las notas va en el boto de registrar
+    #hay un error en el script, y es que nota deberia ser un identificador de la nota, mas o menos como cod_nota, y nosotros 
+    #lo tenemos como string, mañana cambio eso, me dió sueño
+    
 ?>
 
 <!DOCTYPE html>
@@ -153,6 +156,22 @@ require_once "../controllers/controllerGeneral.php";
   font-size: 16px;
   color: #666;
 }
+
+
+.table-container {
+  margin-bottom: 20px;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.data-table th,
+.data-table td {
+  padding: 8px;
+  border: 1px solid #ccc;
+}
     </style>
 
 </style>
@@ -184,8 +203,8 @@ require_once "../controllers/controllerGeneral.php";
       
 <div class="contenedor">
         <h1>Formulario</h1>
-        <form action="listado.php" method="POST">
-            <label for="cod_cur">Seleccione un curso:</label>
+        <form action="planeacion.php" method="POST">
+            <label for="cod_cur">Seleccione El curso:</label>
             <select name="cod_cur">
                 <?php
                 $tables = $obj->getAllcursos();
@@ -194,18 +213,58 @@ require_once "../controllers/controllerGeneral.php";
                 }
                 ?>
             </select>
-            <br>
-            <input type="text" name="year" placeholder="Año" required>
-            <br>
-            <label for="periodo">Seleccione un período:</label>
-            <select name="periodo">
-                <option value="1">Periodo 1</option>
-                <option value="2">Periodo 2</option>
-            </select>
             <br><br>
-            <input type="submit" value="Ver Estudiantes">
+            <input type="submit" name="submit" value="Ver Planeación">
         </form>
   </div>
+<?php if(isset($_POST['cod_cur'])):?>
+<?php $notas = $obj->getPlaneacion($_POST['cod_cur']); ?>
+
+<br><br>
+<div class="table-container">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th style="background-color:E0D9D9">Posicion</th>
+        <th style="background-color:E0D9D9">Nota</th>
+        <th style="background-color:E0D9D9">Porcentaje</th>
+        <th style="background-color:E0D9D9">Editar</th>
+        <th style="background-color:E0D9D9">Borrar</th>
+        <th style="background-color:E0D9D9">Registrar</th>
+      </tr>
+    </thead>
+    <tbody>
+    <?php if($notas): ?>
+      <?php foreach($notas as $nota):?>
+      <tr> <td><?=$nota[0]?></td>
+      <td><?=$nota[1]?></td>
+      <td><?=$nota[2]?></td>
+
+       <td><form action="planeacion.php" method="POST">
+          <input type="hidden" name="cod_est" value="<?=$nota[0]?>">
+      <center><button type="submit" style="padding-top:15px; border: none; background: none;"><i class="fa fa-pencil" style="color: #3498DB;"></i></button></center>
+        </form></td>
+
+        <td><form action="eliminarNota.php" method="POST">
+          <input type="hidden" name="cod_est" value="<?=$nota[0]?>">
+      <center><button type="submit" style="padding-top:15px; border: none; background: none;"><i class="fa-solid fa-delete-left fa-2xl" style="color: #d91717;"></i></button></center>
+        </form></td> 
+
+        <td><form action="registrarCalificacion.php" method="POST">
+          <input type="hidden" name="cod_est" value="<?=$nota[0]?>">
+      <center><button type="submit" style="padding-top:15px; border: none; background: none;"><i class="far fa-file-alt" style="color: #F5B041; vertical-alignment: center;" ></i></button></center>
+        </form></td></tr> 
+
+       <?php endforeach; ?>
+       <?php else:  ?>
+          <tr>
+                <td colspan="3" style="text-align:center">NO HAY REGISTROS</td>
+            </tr>
+        <?php endif; ?>
+    </tbody>
+  </table>
+</div>
+<?php endif; ?>
 
   <br><br>
   </main>

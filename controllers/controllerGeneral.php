@@ -29,6 +29,10 @@ class controllerGeneral {
         header('Location: /app/views/inscripcion.php'); 
     }
 
+    public function getPlaneacion($cod_cur) {
+        return ($this->model->getPlaneacion($cod_cur)) ? $this->model->getPlaneacion($cod_cur): false;
+        }
+
     /* getAll = obtener todo pero cursos */    
     public function getAllcursos() {
            return ($this->model->getAllcursos()) ? $this->model->getAllcursos(): false;
