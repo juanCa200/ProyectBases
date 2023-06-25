@@ -20,7 +20,7 @@ class controllerGeneral {
         }
         public function eliminarEstudiantes($cod_est) {
             $this->model->eliminarEstudiantes($cod_est);
-            header('Location: /app/views/listado.php'); 
+            header('Location: /app/views/SelectCurso.php'); 
             //Header es para redirrecionar una vez hecho todo
         }
 

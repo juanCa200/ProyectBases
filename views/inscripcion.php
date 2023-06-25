@@ -1,14 +1,9 @@
 <!--Llamamos el metodo obtener estudiantes y obtener cursos de la clase control general
     Esto se hace para mostrar los datos en pantalla que vienen de la base de datos-->
 <?php
-require_once "/opt/lampp/htdocs/app/controllers/controllerGeneral.php";
+require_once "../controllers/controllerGeneral.php";
     $obj=new controllerGeneral();
-    $date=$obj->getAllcursos();
-?>
-
-<?php
-require_once "/opt/lampp/htdocs/app/controllers/controllerGeneral.php";
-    $obj=new controllerGeneral();
+    $cursos=$obj->getAllcursos();
     $est=$obj->getAllestudiantes();
 ?>
 
@@ -151,8 +146,8 @@ body {
       <div style="margin-bottom: 30px;">
         <label for="curso" style="font-size: 1.3rem; color: #333; display: block; margin-bottom: 5px;">Curso:</label>
         <select id="curso" name="curso" style="padding: 10px; border-radius: 5px; border: 1px solid #ccc; width: 100%;">
-          <?php foreach($date as $dates): ?>
-            <option value="<?=$dates[0] ?>"><?= $dates[1] ?></option>
+          <?php foreach($cursos as $curso): ?>
+            <option value="<?=$curso[0] ?>"><?= $curso[1] ?></option>
           <?php endforeach; ?>
         </select>
       </div>

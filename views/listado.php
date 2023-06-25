@@ -4,9 +4,6 @@
 require_once "../controllers/controllerGeneral.php";
     $obj=new controllerGeneral();
     
-    $cod_cur = $_POST['cod_cur'];
-    $periodo = $_POST['periodo'];
-    $year = $_POST['year'];
     
     $date = getdate();
     echo"<p>".$date['mday']."/".$date['month']."/".$date['year']."</p>";
@@ -15,7 +12,7 @@ require_once "../controllers/controllerGeneral.php";
     $nomb_cur = $obj->get_nomb_cur($cod_cur);
     echo "curso: ".$nomb_cur."<br><br>";
     */
-    $estudiantes = $obj->getEstudiantes($cod_cur,$year,$periodo);
+    $estudiantes = $obj->getEstudiantes($_POST['cod_cur'],$_POST['year'],$_POST['periodo']);
     
 ?>
 

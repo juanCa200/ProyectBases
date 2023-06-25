@@ -94,10 +94,10 @@
       <form action="registroEstudiante.php" method="POST" style="max-width: 400px; margin: 0 auto; background-color: #eef2f5; padding: 20px; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">
         <h2 style="text-align: center; margin-bottom: 20px; color: #333; font-family: Arial, sans-serif;">Formulario Estudiantil</h2>
         <div style="margin-bottom: 20px;">
-          <input name="cod_est" type="text" placeholder="Código Estudiantil" style="width: 100%; padding: 10px; border: none; border-bottom: 2px solid #007bff; background-color: #eef2f5; color: #333; font-size: 16px;">
+          <input name="cod_est" type="text" placeholder="Código Estudiantil" required style="width: 100%; padding: 10px; border: none; border-bottom: 2px solid #007bff; background-color: #eef2f5; color: #333; font-size: 16px;">
         </div>
         <div style="margin-bottom: 20px;">
-          <input name="nomb_est" type="text" placeholder="Nombre del Estudiante" style="width: 100%; padding: 10px; border: none; border-bottom: 2px solid #007bff; background-color: #eef2f5; color: #333; font-size: 16px;">
+          <input name="nomb_est" type="text" placeholder="Nombre del Estudiante" required style="width: 100%; padding: 10px; border: none; border-bottom: 2px solid #007bff; background-color: #eef2f5; color: #333; font-size: 16px;">
         </div>
         <button type="submit" style="width: 100%; padding: 10px; background-color: #007bff; color: #fff; border: none; border-radius: 3px; cursor: pointer; font-size: 16px;">Enviar</button>
       </form>
