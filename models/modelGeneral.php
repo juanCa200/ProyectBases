@@ -60,7 +60,11 @@ class modelGeneral {
     public function getPlaneacion($cod_cur){
 
         if ($cod_cur) {
+<<<<<<< HEAD
             $query = "SELECT posicion,descrip_nota,porcentaje,nota FROM notas where cod_cur = $cod_cur order by posicion";
+=======
+            $query = "SELECT posicion,nota,porcentaje FROM notas where cod_cur = $cod_cur ";
+>>>>>>> e47f33998ea26e46b912d136fc1b8db18e437aed
             $stmt = $this->conn->prepare($query);
             return($stmt->execute()) ? $stmt->fetchAll(): false;
         }else {
@@ -69,7 +73,11 @@ class modelGeneral {
         
     }
     
+<<<<<<< HEAD
 ########poner el checkInscripcion en el view para mostrar el error
+=======
+
+>>>>>>> e47f33998ea26e46b912d136fc1b8db18e437aed
     public function InscribirEstudiante($cod_est,$cod_cur,$periodo,$anio){
         try {
             if($this->checkInscripcion($cod_est,$cod_cur,$periodo,$anio))
@@ -87,7 +95,11 @@ class modelGeneral {
 
     public function checkInscripcion($cod_est,$cod_cur,$periodo,$anio){
 
+<<<<<<< HEAD
         $query = $this->conn->query("select count(*) from inscripciones where cod_est = $cod_est and cod_cur = $cod_cur and periodo = $periodo and year = $anio;");
+=======
+        $query = $this->conn->query("select count(*) from inscripciones where cod_est = $cod_est and cod_cur = $cod_cur and periodo = $periodo and year = $anio");
+>>>>>>> e47f33998ea26e46b912d136fc1b8db18e437aed
         
         foreach($query as $row){
             $count = $row[0];
@@ -100,7 +112,11 @@ class modelGeneral {
         }
     }
 
+<<<<<<< HEAD
     public function getNombCur($cod_cur){
+=======
+    public function get_nomb_cur($cod_cur){
+>>>>>>> e47f33998ea26e46b912d136fc1b8db18e437aed
         
         $query = $this->conn->query("SELECT nomb_cur from cursos  where cod_cur = $cod_cur;");
        
@@ -111,6 +127,7 @@ class modelGeneral {
         return $nomb_cur;
     }
 
+<<<<<<< HEAD
     public function validarPorcentaje($porcentaje,$cod_cur){
 
         $query = $this->conn->query("select SUM(porcentaje) from notas where cod_cur = $cod_cur;");
@@ -138,5 +155,7 @@ class modelGeneral {
 
     }
 
+=======
+>>>>>>> e47f33998ea26e46b912d136fc1b8db18e437aed
 }
 ?>

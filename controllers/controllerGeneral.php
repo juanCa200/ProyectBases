@@ -47,6 +47,7 @@ class controllerGeneral {
     public function getEstudiantes($cod_cur,$year,$periodo) {
     return ($this->model->getEstudiantes($cod_cur,$year,$periodo)) ? $this->model->getEstudiantes($cod_cur,$year,$periodo): false;
     }
+<<<<<<< HEAD
 
     public function getNombCur($cod_cur) {
         return ($this->model->getNombCur($cod_cur)) ? $this->model->getNombCur($cod_cur): false;
@@ -61,6 +62,8 @@ class controllerGeneral {
         return $this->model->agregarNota($cod_cur,$descrip_nota,$porcentaje,$posicion) ? $this->model->agregarNota($cod_cur,$descrip_nota,$porcentaje,$posicion): false;
     }
     
+=======
+>>>>>>> e47f33998ea26e46b912d136fc1b8db18e437aed
     
     
         
