@@ -47,6 +47,20 @@ class controllerGeneral {
     public function getEstudiantes($cod_cur,$year,$periodo) {
     return ($this->model->getEstudiantes($cod_cur,$year,$periodo)) ? $this->model->getEstudiantes($cod_cur,$year,$periodo): false;
     }
+
+    public function getNombCur($cod_cur) {
+        return ($this->model->getNombCur($cod_cur)) ? $this->model->getNombCur($cod_cur): false;
+        }
+    
+    public function validarPorcentaje($porcentaje,$cod_cur) {
+        return ($this->model->validarPorcentaje($porcentaje,$cod_cur)) ? $this->model->validarPorcentaje($porcentaje,$cod_cur): false;
+        }
+    
+    
+    public function agregarNota($cod_cur,$descrip_nota,$porcentaje,$posicion){
+        return $this->model->agregarNota($cod_cur,$descrip_nota,$porcentaje,$posicion) ? $this->model->agregarNota($cod_cur,$descrip_nota,$porcentaje,$posicion): false;
+    }
+    
     
     
         

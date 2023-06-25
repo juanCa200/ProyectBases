@@ -195,6 +195,7 @@ require_once "../controllers/controllerGeneral.php";
                 ?>
             </select>
             <br>
+            <label for="year">Escriba el año:</label>
             <input type="text" name="year" placeholder="Año" required>
             <br>
             <label for="periodo">Seleccione un período:</label>

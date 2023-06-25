@@ -60,7 +60,7 @@ class modelGeneral {
     public function getPlaneacion($cod_cur){
 
         if ($cod_cur) {
-            $query = "SELECT posicion,nota,porcentaje FROM notas where cod_cur = $cod_cur ";
+            $query = "SELECT posicion,descrip_nota,porcentaje,nota FROM notas where cod_cur = $cod_cur order by posicion";
             $stmt = $this->conn->prepare($query);
             return($stmt->execute()) ? $stmt->fetchAll(): false;
         }else {
@@ -69,7 +69,7 @@ class modelGeneral {
         
     }
     
-
+########poner el checkInscripcion en el view para mostrar el error
     public function InscribirEstudiante($cod_est,$cod_cur,$periodo,$anio){
         try {
             if($this->checkInscripcion($cod_est,$cod_cur,$periodo,$anio))
@@ -87,7 +87,7 @@ class modelGeneral {
 
     public function checkInscripcion($cod_est,$cod_cur,$periodo,$anio){
 
-        $query = $this->conn->query("select count(*) from inscripciones where cod_est = $cod_est and cod_cur = $cod_cur and periodo = $periodo and year = $anio");
+        $query = $this->conn->query("select count(*) from inscripciones where cod_est = $cod_est and cod_cur = $cod_cur and periodo = $periodo and year = $anio;");
         
         foreach($query as $row){
             $count = $row[0];
@@ -100,7 +100,7 @@ class modelGeneral {
         }
     }
 
-    public function get_nomb_cur($cod_cur){
+    public function getNombCur($cod_cur){
         
         $query = $this->conn->query("SELECT nomb_cur from cursos  where cod_cur = $cod_cur;");
        
@@ -109,6 +109,33 @@ class modelGeneral {
         }
 
         return $nomb_cur;
+    }
+
+    public function validarPorcentaje($porcentaje,$cod_cur){
+
+        $query = $this->conn->query("select SUM(porcentaje) from notas where cod_cur = $cod_cur;");
+        
+        foreach($query as $row){
+            $sum = $row[0];
+        }
+
+        if ($sum+$porcentaje <= 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function agregarNota($cod_cur,$descrip_nota,$porcentaje,$posicion){
+        try {
+                $query = "INSERT INTO nota(cod_cur,descrip_nota,porcentaje,posicion) values ($cod_cur,'$descrip_nota',$porcentaje,$posicion);";
+                $stmt = $this->conn->prepare($query);    
+                return $stmt->execute();
+        }
+        catch (PDOException $exception){
+            return 'Error: ' . $exception->getMessage();
+        }
+
     }
 
 }

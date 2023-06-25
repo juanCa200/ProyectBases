@@ -1,12 +1,8 @@
+
+
 <?php
 require_once "../controllers/controllerGeneral.php";
-    $obj=new controllerGeneral();
-
-    #faltan cosas por agregar aqui, ningun boton es funcional aun, si tiene dudas de como funciona el if isset
-    #me escribe, los botones redireccionan a paginas que aun no existen, lo del registro de las notas va en el boto de registrar
-    #hay un error en el script, y es que nota deberia ser un identificador de la nota, mas o menos como cod_nota, y nosotros 
-    #lo tenemos como string, mañana cambio eso, me dió sueño
-    
+    $obj=new controllerGeneral();  
 ?>
 
 <!DOCTYPE html>
@@ -156,22 +152,6 @@ require_once "../controllers/controllerGeneral.php";
   font-size: 16px;
   color: #666;
 }
-
-
-.table-container {
-  margin-bottom: 20px;
-}
-
-.data-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.data-table th,
-.data-table td {
-  padding: 8px;
-  border: 1px solid #ccc;
-}
     </style>
 
 </style>
@@ -202,78 +182,45 @@ require_once "../controllers/controllerGeneral.php";
 <div class="row row-cols-1 g-4">
       
 <div class="contenedor">
-        <h1>Formulario</h1>
-        <form action="planeacion.php" method="POST">
-            <label for="cod_cur">Seleccione El curso:</label>
-            <select name="cod_cur">
-                <?php
-                $tables = $obj->getAllcursos();
-                foreach ($tables as $row) {
-                    echo "<option value='" . $row[0] . "'>" . $row[1] . "</option>";
-                }
-                ?>
-            </select>
+        <h1>Agregar Nota en el curso <br><?php echo($obj->getNombCur($_POST['cod_cur'])) ?></h1>
+        <form action="agregarNota.php" method="POST">
+            
+
+            <input type="hidden" name="cod_cur" value="<?php echo($_POST['cod_cur'])?>">
+            <br>
+            <label for="descripcion">Ingrese La descripcion:</label>
+            <input type="text" name="descripcion" placeholder="Descripción" required>
+            <br>
+            <label for="porcentaje">Ingrese El porcentaje:</label>
+            <input type="text" name="porcentaje" placeholder="Porcentaje (%)" required> 
+            <br>
+            <label for="posicion">Ingrese La Posicion:</label>
+            <input type="text" name="posicion" placeholder="Posición" required>
+            
             <br><br>
-            <input type="submit" name="submit" value="Ver Planeación">
+            <input type="submit" name='submit' value="Agregar Nota">
         </form>
   </div>
-<?php if(isset($_POST['cod_cur'])):?>
-<?php $notas = $obj->getPlaneacion($_POST['cod_cur']); ?>
-
-<br>
-
-<form action="agregarNota.php" method="POST">
-          <input type="hidden" name="cod_cur" value="<?php echo($_POST['cod_cur'])?>">
-      <center><button type="submit" style="padding-top:15px; border: none; background: none;"><i class="fas fa-plus" style="color: #006400" ></i> Agregar Nota</button></center>
-        </form>
-
-<br>
-<div class="table-container">
-  <table class="data-table">
-    <thead>
-      <tr>
-        <th style="background-color:E0D9D9">Posicion</th>
-        <th style="background-color:E0D9D9">Nota</th>
-        <th style="background-color:E0D9D9">Porcentaje</th>
-        <th style="background-color:E0D9D9">Editar</th>
-        <th style="background-color:E0D9D9">Borrar</th>
-        <th style="background-color:E0D9D9">Registrar</th>
-      </tr>
-    </thead>
-    <tbody>
-    <?php if($notas): ?>
-      <?php foreach($notas as $nota):?>
-      <tr> <td><?=$nota[0]?></td>
-      <td><?=$nota[1]?></td>
-      <td><?= $nota[2]*100 ."%" ?></td>
-
-       <td><form action="planeacion.php" method="POST">
-          <input type="hidden" name="cod_est" value="<?=$nota[0]?>">
-      <center><button type="submit" style="padding-top:15px; border: none; background: none;"><i class="fa fa-pencil" style="color: #3498DB;"></i></button></center>
-        </form></td>
-
-        <td><form action="eliminarNota.php" method="POST">
-          <input type="hidden" name="cod_est" value="<?=$nota[0]?>">
-      <center><button type="submit" style="padding-top:15px; border: none; background: none;"><i class="fa-solid fa-delete-left fa-2xl" style="color: #d91717;"></i></button></center>
-        </form></td> 
-
-        <td><form action="registrarCalificacion.php" method="POST">
-          <input type="hidden" name="cod_est" value="<?=$nota[0]?>">
-      <center><button type="submit" style="padding-top:15px; border: none; background: none;"><i class="far fa-file-alt" style="color: #F5B041; vertical-alignment: center;" ></i></button></center>
-        </form></td></tr> 
-
-       <?php endforeach; ?>
-       <?php else:  ?>
-          <tr>
-                <td colspan="6" style="text-align:center">NO HAY REGISTROS</td>
-            </tr>
-        <?php endif; ?>
-    </tbody>
-  </table>
-</div>
-<?php endif; ?>
 
   <br><br>
+<?php if(isset($_POST['submit'])):?>
+<?php 
+
+if ($obj->validarPorcentaje($_POST['porcentaje']*0.01,$_POST['cod_cur']) && strlen($_POST['descripcion'])<=20 ) {
+
+    $obj->agregarNota($_POST['cod_cur'],$_POST['descripcion'],$_POST['porcentaje']*0.01,$_POST['posicion']);
+    echo"Registro Exitoso!";
+}
+else {
+    echo  "Los datos son incorrectos, ingreselos nuevamente por favor";
+}
+
+
+?>
+<?php endif; ?>
+
+<input type='button'  name='Volver Atrás' value='Volver Atrás' onclick=location.href='http://localhost/app/views/planeacion.php'><br>
+
   </main>
 </body>
 </html>
