@@ -13,9 +13,14 @@ class controllerGeneral {
     }
 
     /* Para guardar, por ahora no usamos la funcion pero asi funciona */
-    public function saveEstudiantes($codEst, $nombEst) {
-            $this->model->createEstudiante($codEst, $nombEst);
-            header('Location: /app/views/aqui_va_la_vista.php'); 
+    public function saveEstudiantes($cod_est,$nomb_est) {
+            $this->model->createEstudiante($cod_est,$nomb_est);
+            header('Location: /app/views/registro.php'); 
+            //Header es para redirrecionar una vez hecho todo
+        }
+        public function eliminarEstudiantes($cod_est) {
+            $this->model->eliminarEstudiantes($cod_est);
+            header('Location: /app/views/listado.php'); 
             //Header es para redirrecionar una vez hecho todo
         }
 

@@ -10,12 +10,20 @@ class modelGeneral {
         $this->conn = CConexion::ConexionBD();
     }
 
-    public function createEstudiante($codEst, $nombEst) {
+    public function createEstudiante($codEst,$nombEst) {
         // Preparar la consulta de inserción
-        $query = "INSERT INTO estudiantes (cod_est, nomb_est) VALUES (:codEst, :nombEst)";
+        $query = "INSERT INTO estudiantes(cod_est, nomb_est) VALUES (:cod_est,:nomb_est)";
         $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':codEst', $codEst);
-        $stmt->bindParam(':nombEst', $nombEst);
+        $stmt->bindParam(':cod_est', $codEst);
+        $stmt->bindParam(':nomb_est', $nombEst);
+        return $stmt->execute();
+    }
+
+    public function eliminarEstudiantes($cod_est) {
+        // Preparar la consulta de inserción
+        $query = "DELETE FROM inscripciones WHERE cod_est = :cod_est";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':cod_est', $cod_est);
         return $stmt->execute();
     }
 
@@ -47,12 +55,14 @@ class modelGeneral {
 
     public function InscribirEstudiante($cod_est,$cod_cur,$periodo,$anio){
         try {
-            $query = "INSERT INTO inscripciones(periodo,year,cod_cur,cod_est) values (:periodo, :anio, :cod_cur,:cod_est)";
+            $cod_insc =1;
+            $query = "INSERT INTO inscripciones(cod_insc,periodo,year,cod_cur,cod_est) values (:cod_insc,:periodo, :anio, :cod_cur,:cod_est)";
             $stmt = $this->conn->prepare($query);
             $stmt->bindParam(':cod_est', $cod_est);
             $stmt->bindParam(':cod_cur', $cod_cur);
             $stmt->bindParam(':periodo', $periodo);
             $stmt->bindParam(':anio', $anio);
+            $stmt->bindParam(':cod_insc', $cod_insc);
             return $stmt->execute();
         }
         catch (PDOException $exception){

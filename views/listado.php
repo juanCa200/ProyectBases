@@ -15,7 +15,6 @@ require_once "../controllers/controllerGeneral.php";
     $nomb_cur = $obj->get_nomb_cur($cod_cur);
     echo "curso: ".$nomb_cur."<br><br>";
     */
-
     $estudiantes = $obj->getEstudiantes($cod_cur,$year,$periodo);
     
 ?>
@@ -160,31 +159,30 @@ require_once "../controllers/controllerGeneral.php";
   <table class="data-table">
     <thead>
       <tr>
-        <th style="background-color:red">Cod_est</th>
-        <th style="background-color:green">Nombre</th>
+        <th style="background-color:E0D9D9">Cod_est</th>
+        <th style="background-color:E0D9D9">Nombre</th>
+        <th style="background-color:E0D9D9">Eliminar</th>
       </tr>
     </thead>
     <tbody>
+    <?php if($estudiantes): ?>
       <?php foreach($estudiantes as $estu):?>
       <tr> <td><?=$estu[0]?></td>
-       <td><?=$estu[1]?></td></tr>
+       <td><?=$estu[1]?></td>
+       <td><form action="eliminar.php" method="POST">
+          <input type="hidden" name="cod_est" value="<?=$estu[0]?>">
+      <center><button type="submit" style="padding-top:15px; border: none; background: none;"><i class="fa-solid fa-delete-left fa-2xl" style="color: #d91717;"></i></button></center>
+        </form></td></tr> 
        <?php endforeach; ?>
+       <?php else:  ?>
+          <tr>
+                <td colspan="3" style="text-align:center">NO HAY REGISTROS</td>
+            </tr>
+        <?php endif; ?>
     </tbody>
   </table>
 </div>
-
-<div class="pagination-container">
-  <button class="prev-btn">Anterior</button>
-  <span class="page-num"></span>
-  <button class="next-btn">Siguiente</button>
-</div>      
-
- <br><br><br><br>
-        <footer class="footer">
-    <div class="container">
-      <p>© 2023 Mi Sitio. Todos los derechos reservados.</p>
-    </div>
-  </footer>
+ <br><br><br>
       </div>
     </div>
   </main>

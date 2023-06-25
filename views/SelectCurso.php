@@ -166,7 +166,7 @@ require_once "/opt/lampp/htdocs/app/controllers/controllerGeneral.php";
     <ul class="menu">
       <li><a href="/app/views/SelectCurso.php"><i class="fa-solid fa-sitemap"></i></i>  Seleccionar Curso</a></li>
       <li><a href="/app/views/inscripcion.php"><i class="fa-solid fa-plus"></i>  Inscripcion de estudiantes</a></li>
-      <li><a href="/app/views/pagina_registro_Est.php"><i class="fa-solid fa-plus"></i>  Registro de estudiantes</a></li>
+      <li><a href="/app/views/registro.php"><i class="fa-solid fa-plus"></i>  Registro de estudiantes</a></li>
       <li><a href="/app/views/pagina_planeacion.php"><i class="fa-solid fa-clipboard"></i>  Planeacion</a></li>
       <li><a href="/app/views/pagina_calificaciones.php"><i class="fa-solid fa-plus"></i>  Calificaciones</a></li>
       <li><a href="#"><i class="fa-solid fa-clipboard"></i>  Reporte</a></li>
@@ -180,25 +180,6 @@ require_once "/opt/lampp/htdocs/app/controllers/controllerGeneral.php";
       <p class="page-description">Aquí encontrarás tus cursos, calificaciones y mensajes.</p>
   </div>
 <br>
-    <div class="grid-container">
-  <div class="grid-item">
-    <h3>Ingeniería de Software</h3>
-    <p class="student-count">50 estudiantes</p>
-  </div>
-  <div class="grid-item">
-    <h3>Bases de Datos</h3>
-    <p class="student-count">30 estudiantes</p>
-  </div>
-  <div class="grid-item">
-  <h3>Total de Cursos</h3>
-  <p class="student-count">2 cursos</p>
-  </div>
-  <div class="grid-item">
-  <h3>Total de reportes</h3>
-  <p class="student-count">2 reportes</p>
-  </div>
-</div>
-
 
 <div class="row row-cols-1 g-4">
       
