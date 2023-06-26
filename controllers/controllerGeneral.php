@@ -55,6 +55,10 @@ class controllerGeneral {
     public function validarPorcentaje($porcentaje,$cod_cur) {
         return ($this->model->validarPorcentaje($porcentaje,$cod_cur)) ? $this->model->validarPorcentaje($porcentaje,$cod_cur): false;
     }
+
+    public function validarPorcentajeActualizar($porcentaje,$cod_cur,$cod_nota) {
+        return ($this->model->validarPorcentajeActualizar($porcentaje,$cod_cur,$cod_nota)) ? $this->model->validarPorcentajeActualizar($porcentaje,$cod_cur,$cod_nota): false;
+    }
     
     public function agregarNota($cod_cur,$descrip_nota,$porcentaje,$posicion){
         $this->model->agregarNota($cod_cur,$descrip_nota,$porcentaje,$posicion);
@@ -68,6 +72,12 @@ class controllerGeneral {
         $this->model->eliminarNota($cod_nota);
         header('Location: /app/views/planeacion.php'); 
     }
+
+    public function actualizarNota($cod_nota,$cod_cur,$descrip_nota,$porcentaje,$posicion){
+        $this->model->actualizarNota($cod_nota,$cod_cur,$descrip_nota,$porcentaje,$posicion);
+        header('Location: /app/views/planeacion.php'); 
+    }
+
 
 
     

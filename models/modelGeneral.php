@@ -126,6 +126,28 @@ class modelGeneral {
         }
     }
 
+    public function validarPorcentajeActualizar($porcentaje_nuevo,$cod_cur,$cod_nota){
+
+        $query = $this->conn->query("select SUM(porcentaje) from notas where cod_cur = $cod_cur;");
+        
+        foreach($query as $row){
+            $sum = $row[0];
+        }
+
+        $query = $this->conn->query("select porcentaje from notas where nota = $cod_nota;");
+
+        foreach($query as $row){
+            $porcentaje_antiguo = $row[0];
+        }
+
+        if ($sum+$porcentaje_nuevo-$porcentaje_antiguo <= 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
     public function agregarNota($cod_cur,$descrip_nota,$porcentaje,$posicion){
         try {
                 $query = "INSERT INTO notas(cod_cur,descrip_nota,porcentaje,posicion) values ($cod_cur,'$descrip_nota',$porcentaje,$posicion);";
@@ -159,6 +181,16 @@ class modelGeneral {
         $stmt = $this->conn->prepare($query);
         return $stmt->execute();
     }
+
+    public function actualizarNota($cod_nota,$cod_cur,$descrip_nota,$porcentaje,$posicion) {
+        // Preparar la consulta de inserción
+        $query = "UPDATE notas SET cod_cur = $cod_cur , descrip_nota = '$descrip_nota', porcentaje = $porcentaje, posicion = $posicion WHERE nota = $cod_nota";
+        $stmt = $this->conn->prepare($query);
+        return $stmt->execute();
+    }
+
+
+
 
 }
 ?>

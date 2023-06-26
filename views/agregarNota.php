@@ -5,6 +5,8 @@ require_once "../controllers/controllerGeneral.php";
     $obj=new controllerGeneral();  
 ?>
 
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -173,36 +175,8 @@ require_once "../controllers/controllerGeneral.php";
 
   <main class="content">
     
-  <div class="container">
-      <h2 class="page-title">Vista general del curso</h2>
-      <p class="page-description">Aquí encontrarás tus cursos, calificaciones y mensajes.</p>
-  </div>
-<br>
-
 <div class="row row-cols-1 g-4">
-      
-<div class="contenedor">
-        <h1>Agregar Nota en el curso <br><?php echo($obj->getNombCur($_POST['cod_cur'])) ?></h1>
-        <form action="agregarNota.php" method="POST">
-            
 
-            <input type="hidden" name="cod_cur" value="<?php echo($_POST['cod_cur'])?>">
-            <br>
-            <label for="descripcion">Ingrese La descripcion:</label>
-            <input type="text" name="descripcion" placeholder="Descripción" required>
-            <br>
-            <label for="porcentaje">Ingrese El porcentaje:</label>
-            <input type="text" name="porcentaje" placeholder="Porcentaje (%)" required> 
-            <br>
-            <label for="posicion">Ingrese La Posicion:</label>
-            <input type="text" name="posicion" placeholder="Posición" required>
-            
-            <br><br>
-            <input type="submit" name='submit' value="Agregar Nota">
-        </form>
-  </div>
-
-  <br><br>
 <?php if(isset($_POST['submit'])):?>
 <?php 
 
@@ -227,6 +201,29 @@ else{
 
 ?>
 <?php endif; ?>
+      
+<div class="contenedor">
+        <h1>Agregar Nota en el curso <br><?php echo($obj->getNombCur($_POST['cod_cur'])) ?></h1>
+        <form action="agregarNota.php" method="POST">
+            
+
+            <input type="hidden" name="cod_cur" value="<?php echo($_POST['cod_cur'])?>">
+            <br>
+            <label for="descripcion">Ingrese La descripcion:</label>
+            <input type="text" name="descripcion" placeholder="Descripción" required>
+            <br>
+            <label for="porcentaje">Ingrese El porcentaje:</label>
+            <input type="text" name="porcentaje" placeholder="Porcentaje (%)" required> 
+            <br>
+            <label for="posicion">Ingrese La Posicion:</label>
+            <input type="text" name="posicion" placeholder="Posición" required>
+            
+            <br><br>
+            <input type="submit" name="submit" value="Agregar Nota">
+        </form>
+  </div>
+
+  <br><br>
 
 <input type='button'  name='Volver Atrás' value='Volver Atrás' onclick=location.href='http://localhost/app/views/planeacion.php'><br>
 

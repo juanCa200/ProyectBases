@@ -2,8 +2,8 @@
 require_once "../controllers/controllerGeneral.php";
     $obj=new controllerGeneral();
 
-    #faltan cosas por agregar aqui, ningun boton es funcional aun, si tiene dudas de como funciona el if isset
-    #me escribe, los botones redireccionan a paginas que aun no existen, lo del registro de las notas va en el boto de registrar
+    
+    
     #hay un error en el script, y es que nota deberia ser un identificador de la nota, mas o menos como cod_nota, y nosotros 
     #lo tenemos como string, mañana cambio eso, me dió sueño
     
@@ -192,12 +192,7 @@ require_once "../controllers/controllerGeneral.php";
   </div>
 
   <main class="content">
-    
-  <div class="container">
-      <h2 class="page-title">Vista general del curso</h2>
-      <p class="page-description">Aquí encontrarás tus cursos, calificaciones y mensajes.</p>
-  </div>
-<br>
+
 
 <div class="row row-cols-1 g-4">
       
@@ -207,9 +202,9 @@ require_once "../controllers/controllerGeneral.php";
             <label for="cod_cur">Seleccione El curso:</label>
             <select name="cod_cur">
                 <?php
-                $tables = $obj->getAllcursos();
-                foreach ($tables as $row) {
-                    echo "<option value='" . $row[0] . "'>" . $row[1] . "</option>";
+                $cursos = $obj->getAllcursos();
+                foreach ($cursos as $curso) {
+                    echo "<option value='" . $curso[0] . "'>" . $curso[1] . "</option>";
                 }
                 ?>
             </select>
@@ -223,7 +218,7 @@ require_once "../controllers/controllerGeneral.php";
 <br>
 
 <form action="agregarNota.php" method="POST">
-          <input type="hidden" name="cod_cur" value="<?php echo($_POST['cod_cur'])?>">
+          <input type="hidden" name="cod_cur" value="<?=$_POST['cod_cur']?>">
       <center><button type="submit" style="padding-top:15px; border: none; background: none;"><i class="fas fa-plus" style="color: #006400" ></i> Agregar Nota</button></center>
         </form>
 
@@ -247,8 +242,13 @@ require_once "../controllers/controllerGeneral.php";
       <td><?=$nota[1]?></td>
       <td><?= $nota[2]*100 ."%" ?></td>
 
-       <td><form action="planeacion.php" method="POST">
+       <td><form action="actualizarNota.php" method="POST">
           <input type="hidden" name="cod_nota" value="<?=$nota[3]?>">
+          <input type="hidden" name="cod_cur" value="<?=$_POST['cod_cur']?>">
+          <input type="hidden" name="descripcion" value="<?=$nota[1]?>">
+          <input type="hidden" name="porcentaje" value="<?=$nota[2]?>">
+          <input type="hidden" name="posicion" value="<?=$nota[0]?>">
+
       <center><button type="submit" style="padding-top:15px; border: none; background: none;"><i class="fa fa-pencil" style="color: #3498DB;"></i></button></center>
         </form></td>
 

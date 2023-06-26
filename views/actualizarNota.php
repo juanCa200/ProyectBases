@@ -1,9 +1,12 @@
-
-
 <?php
 require_once "../controllers/controllerGeneral.php";
     $obj=new controllerGeneral();
-    $date=$obj->getAllcursos();    
+
+    #faltan cosas por agregar aqui, ningun boton es funcional aun, si tiene dudas de como funciona el if isset
+    #me escribe, los botones redireccionan a paginas que aun no existen, lo del registro de las notas va en el boto de registrar
+    #hay un error en el script, y es que nota deberia ser un identificador de la nota, mas o menos como cod_nota, y nosotros 
+    #lo tenemos como string, mañana cambio eso, me dió sueño
+    
 ?>
 
 <!DOCTYPE html>
@@ -153,6 +156,22 @@ require_once "../controllers/controllerGeneral.php";
   font-size: 16px;
   color: #666;
 }
+
+
+.table-container {
+  margin-bottom: 20px;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.data-table th,
+.data-table td {
+  padding: 8px;
+  border: 1px solid #ccc;
+}
     </style>
 
 </style>
@@ -177,32 +196,57 @@ require_once "../controllers/controllerGeneral.php";
 <div class="row row-cols-1 g-4">
       
 <div class="contenedor">
-        <h1>Formulario</h1>
-        <form action="listado.php" method="POST">
-            <label for="cod_cur">Seleccione un curso:</label>
-            <select name="cod_cur">
-                <?php
-                $tables = $obj->getAllcursos();
-                foreach ($tables as $row) {
-                    echo "<option value='" . $row[0] . "'>" . $row[1] . "</option>";
-                }
-                ?>
-            </select>
+        <h1>Actualizar Nota <br> <?=$_POST['descripcion']?> <br> del curso <br> <?=$obj->getNombCur($_POST['cod_cur'])?></h1>
+        <form action="actualizarNota.php" method="POST">
+            
+
+            <input type="hidden" name="cod_nota" value="<?=$_POST['cod_nota']?>">
+            <input type="hidden" name="cod_cur" value="<?=$_POST['cod_cur']?>">
+            <input type="hidden" name="descripcion" value="<?=$_POST['descripcion']?>">
+            <input type="hidden" name="porcentaje" value="<?=$_POST['porcentaje']?>">
+            <input type="hidden" name="posicion" value="<?=$_POST['posicion']?>">
+
+            <label for="year">Escriba la nueva descripcion:</label>
+            <input type="text" name="descripcion" placeholder="<?=$_POST['descripcion']?>" required>
             <br>
-            <label for="year">Escriba el año:</label>
-            <input type="text" name="year" placeholder="Año" required>
+            <label for="year">Escriba el nuevo porcentaje (%):</label>
+            <input type="text" name="porcentaje" placeholder="<?=$_POST['porcentaje']*100 ."%"?>" required>
             <br>
-            <label for="periodo">Seleccione un período:</label>
-            <select name="periodo">
-                <option value="1">Periodo 1</option>
-                <option value="2">Periodo 2</option>
-            </select>
+            <label for="year">Escriba la nueva posición:</label>
+            <input type="text" name="posicion" placeholder="<?=$_POST['posicion']?>" required>
             <br><br>
-            <input type="submit" value="Ver Estudiantes">
+            <input type="submit" name="submit" value="Actualizar Nota">
         </form>
   </div>
 
-  <br><br>
+<?php if(isset($_POST['submit'])):?>
+<?php 
+
+if ($obj->validarPorcentajeActualizar($_POST['porcentaje']*0.01,$_POST['cod_cur'],$_POST['cod_nota']) && strlen($_POST['descripcion'])<=20 && $obj->validarPosicion($_POST['cod_cur'],$_POST['posicion']) ) {
+
+    $obj->actualizarNota($_POST['cod_nota'],$_POST['cod_cur'],$_POST['descripcion'],$_POST['porcentaje']*0.01,$_POST['posicion']);
+    echo"Registro Exitoso!";
+}
+else if ($obj->validarPorcentajeActualizar($_POST['porcentaje']*0.01,$_POST['cod_cur'],$_POST['cod_nota']) == false) {
+  echo  "El porcentaje total es mayor al 100%, ingrese los datos nuevamente por favor";
+}
+else if (strlen($_POST['descripcion']) > 20) {
+  echo  "La descripcion es muy larga, ingrese los datos nuevamente por favor";
+}
+else if ($obj->validarPosicion($_POST['cod_cur'],$_POST['posicion']) == false) {
+  echo  "La posicion ingresada ya está tomada, ingrese los datos nuevamente por favor";
+}
+else{
+  echo  "Los datos son incorrectos, ingreselos nuevamente por favor";
+}
+
+
+?>
+<?php endif; ?>
+
+  <br>
+  <center><input type='button'  name='Volver Atrás' value='Volver Atrás' onclick=location.href='http://localhost/app/views/planeacion.php'><br>
+  
   </main>
 </body>
 </html>
