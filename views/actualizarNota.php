@@ -2,11 +2,6 @@
 require_once "../controllers/controllerGeneral.php";
     $obj=new controllerGeneral();
 
-    #faltan cosas por agregar aqui, ningun boton es funcional aun, si tiene dudas de como funciona el if isset
-    #me escribe, los botones redireccionan a paginas que aun no existen, lo del registro de las notas va en el boto de registrar
-    #hay un error en el script, y es que nota deberia ser un identificador de la nota, mas o menos como cod_nota, y nosotros 
-    #lo tenemos como string, mañana cambio eso, me dió sueño
-    
 ?>
 
 <!DOCTYPE html>

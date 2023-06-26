@@ -25,8 +25,7 @@ class controllerGeneral {
         }
 
     public function InscripcionPorCurso($cod_est,$cod_cur,$periodo,$year){
-        $this->model->InscribirEstudiante($cod_est,$cod_cur,$periodo,$year) ;
-        header('Location: /app/views/inscripcion.php'); 
+        $this->model->InscribirEstudiante($cod_est,$cod_cur,$periodo,$year); 
     }
 
     public function getPlaneacion($cod_cur) {
@@ -59,7 +58,15 @@ class controllerGeneral {
     public function validarPorcentajeActualizar($porcentaje,$cod_cur,$cod_nota) {
         return ($this->model->validarPorcentajeActualizar($porcentaje,$cod_cur,$cod_nota)) ? $this->model->validarPorcentajeActualizar($porcentaje,$cod_cur,$cod_nota): false;
     }
+
+    public function  validarInscripcion($cod_est,$cod_cur,$periodo,$anio) {
+        return ($this->model-> validarInscripcion($cod_est,$cod_cur,$periodo,$anio)) ? $this->model-> validarInscripcion($cod_est,$cod_cur,$periodo,$anio): false;
+    }
     
+    public function  validarCodEst($cod_est) {
+        return ($this->model-> validarCodEst($cod_est)) ? $this->model->validarCodEst($cod_est): false;
+    }
+
     public function agregarNota($cod_cur,$descrip_nota,$porcentaje,$posicion){
         $this->model->agregarNota($cod_cur,$descrip_nota,$porcentaje,$posicion);
     }
@@ -81,9 +88,6 @@ class controllerGeneral {
         $this->model->actualizarNota($cod_nota,$cod_cur,$descrip_nota,$porcentaje,$posicion);
         header('Location: /app/views/planeacion.php'); 
     }
-
-
-
     
 }
 ?>

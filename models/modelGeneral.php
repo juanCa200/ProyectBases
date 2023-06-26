@@ -72,20 +72,18 @@ class modelGeneral {
 ########poner el checkInscripcion en el view para mostrar el error
     public function InscribirEstudiante($cod_est,$cod_cur,$periodo,$anio){
         try {
-            if($this->checkInscripcion($cod_est,$cod_cur,$periodo,$anio))
-            {
-                $query = "INSERT INTO inscripciones(periodo,year,cod_cur,cod_est) values ($periodo, $anio, $cod_cur,$cod_est)";
-                $stmt = $this->conn->prepare($query);    
-                return $stmt->execute();
+            $query = "INSERT INTO inscripciones(periodo,year,cod_cur,cod_est) values ($periodo, $anio, $cod_cur,$cod_est)";
+            $stmt = $this->conn->prepare($query);    
+            return $stmt->execute();
             }
-        }
+        
         catch (PDOException $exception){
             return 'Error: ' . $exception->getMessage();
         }
 
     }
 
-    public function checkInscripcion($cod_est,$cod_cur,$periodo,$anio){
+    public function validarInscripcion($cod_est,$cod_cur,$periodo,$anio){
 
         $query = $this->conn->query("select count(*) from inscripciones where cod_est = $cod_est and cod_cur = $cod_cur and periodo = $periodo and year = $anio;");
         
@@ -169,6 +167,21 @@ class modelGeneral {
         }
 
         if ($count == 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function validarCodEst($cod_est){
+
+        $query = $this->conn->query("select count(*) from estudiantes where cod_est = $cod_est;");
+        
+        foreach($query as $row){
+            $count = $row[0];
+        }
+
+        if ($count == 1) {
             return true;
         } else {
             return false;

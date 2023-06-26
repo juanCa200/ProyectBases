@@ -4,7 +4,6 @@
 require_once "../controllers/controllerGeneral.php";
     $obj=new controllerGeneral();
     $cursos=$obj->getAllcursos();
-    $est=$obj->getAllestudiantes();
 ?>
 
 <!DOCTYPE html>
@@ -123,8 +122,37 @@ body {
       <p class="page-description" style="color: #666; font-size: 16px;">Completa el formulario de Inscripcion de estudiantes para cursos.</p>
     </div>
       <div class="row row-cols-1 g-4">
+      
+<?php if(isset($_POST['submit'])):?>
+<?php 
+
+
+if (is_int(intval($_POST['cod_est'])) &&  intval($_POST['anio']) > 0  &&  $obj->validarCodEst($_POST['cod_est']) && $obj->validarInscripcion($_POST['cod_est'],$_POST['cod_cur'],$_POST['periodo'],$_POST['anio']) ) {
+
+    $obj->InscripcionPorCurso($_POST['cod_est'],$_POST['cod_cur'],$_POST['periodo'],$_POST['anio']);
+    echo"Registro Exitoso!";
+}
+else if (intval($_POST['cod_est']) <= 0) {
+  echo  "Ingrese un codigo valido por favor";
+}
+else if ($obj->validarCodEst($_POST['cod_est']) == false) {
+  echo  "No existe estudiante con ese codigo";
+}
+else if ( intval($_POST['anio']) <= 0 ) {
+  echo  "Ingrese un año valido por favor";
+} 
+else if ($obj->validarInscripcion($_POST['cod_est'],$_POST['cod_cur'],$_POST['periodo'],$_POST['anio']) == false) {
+  echo  "El estudiante ya fue ingresado al curso";
+}
+else{
+  echo  "Los datos son incorrectos, ingreselos nuevamente por favor";
+}
+
+
+?>
+<?php endif; ?>
             
-      <form action="inscripcionProcesado.php" method="POST" style="max-width: 500px; margin: 0 auto; background-color: #f2f2f2; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); font-family: Arial, sans-serif;">
+      <form action="inscripcion.php" method="POST" style="max-width: 500px; margin: 0 auto; background-color: #f2f2f2; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); font-family: Arial, sans-serif;">
   <div style="display: flex; flex-wrap: wrap; gap: 30px;">
     <div style="flex: 1;">
       <div style="margin-bottom: 30px;">
@@ -144,7 +172,7 @@ body {
     <div style="flex: 1;">
       <div style="margin-bottom: 30px;">
         <label for="curso" style="font-size: 1.3rem; color: #333; display: block; margin-bottom: 5px;">Curso:</label>
-        <select id="curso" name="curso" style="padding: 10px; border-radius: 5px; border: 1px solid #ccc; width: 100%;">
+        <select id="curso" name="cod_cur" style="padding: 10px; border-radius: 5px; border: 1px solid #ccc; width: 100%;">
           <?php foreach($cursos as $curso): ?>
             <option value="<?=$curso[0] ?>"><?= $curso[1] ?></option>
           <?php endforeach; ?>
@@ -159,7 +187,7 @@ body {
   </div>
 
   <div style="text-align: center; margin-top: 20px;">
-    <input type="submit" value="Enviar" style="padding: 10px 20px; background-color: #007bff; color: #fff; border: none; border-radius: 5px; cursor: pointer; font-size: 1.3rem;">
+    <input type="submit" name="submit" value="Enviar" style="padding: 10px 20px; background-color: #007bff; color: #fff; border: none; border-radius: 5px; cursor: pointer; font-size: 1.3rem;">
   </div>
 </form>
 
