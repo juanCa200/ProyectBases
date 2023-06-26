@@ -84,8 +84,11 @@ class controllerGeneral {
 
     public function actualizarNota($cod_nota,$cod_cur,$descrip_nota,$porcentaje,$posicion){
         $this->model->actualizarNota($cod_nota,$cod_cur,$descrip_nota,$porcentaje,$posicion);
-        header('Location: /app/views/planeacion.php'); 
     }
+
+    public function getCalificaciones($cod_nota) {
+        return ($this->model->getCalificaciones($cod_nota));
+        }
     
 }
 ?>

@@ -1,7 +1,4 @@
-<?php
-require_once "../controllers/controllerGeneral.php";
-    $obj=new controllerGeneral();
-?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -186,91 +183,56 @@ require_once "../controllers/controllerGeneral.php";
   </div>
 
   <main class="content">
-
+  <?php
+require_once "../controllers/controllerGeneral.php";
+    $obj = new controllerGeneral();
+    $calificaciones = $obj->getCalificaciones($_POST['cod_nota']);
+    print_r($calificaciones);
+?>
 
 <div class="row row-cols-1 g-4">
-      
-<div class="contenedor">
-        <h1>Formulario</h1>
-        <form action="planeacion.php" method="POST">
-            <label for="cod_cur">Seleccione El curso:</label>
-            <select name="cod_cur">
-                <?php
-                $cursos = $obj->getAllcursos();
-                foreach ($cursos as $curso) {
-                    echo "<option value='" . $curso[0] . "'>" . $curso[1] . "</option>";
-                }
-                ?>
-            </select>
-            <br><br>
-            <input type="submit" name="submit" value="Ver Planeación">
-        </form>
-  </div>
-<?php if(isset($_POST['cod_cur'])):?>
-<?php $notas = $obj->getPlaneacion($_POST['cod_cur']); ?>
 
-<br>
 
-<form action="agregarNota.php" method="POST">
-          <input type="hidden" name="cod_cur" value="<?=$_POST['cod_cur']?>">
-      <center><button type="submit" style="padding-top:15px; border: none; background: none;"><i class="fas fa-plus" style="color: #006400" ></i> Agregar Nota</button></center>
-        </form>
-
-<br>
-<div class="table-container">
-  <table class="data-table">
+<table class="data-table">
     <thead>
-        <tr>
-              <td colspan="6" style="text-align:center"><?="Planeacion de ".$obj->getNombCur($_POST['cod_cur'])?></td>
-        </tr>
-        <tr>
-        <th style="background-color:E0D9D9">Posicion</th>
+      <tr>
+        <th style="background-color:E0D9D9">Codigo</th>
+        <th style="background-color:E0D9D9">Nombre</th>
         <th style="background-color:E0D9D9">Nota</th>
-        <th style="background-color:E0D9D9">Porcentaje</th>
-        <th style="background-color:E0D9D9">Editar</th>
-        <th style="background-color:E0D9D9">Borrar</th>
-        <th style="background-color:E0D9D9">Registrar</th>
+        <th style="background-color:E0D9D9">Insertar</th>
+        <th style="background-color:E0D9D9">Guardar</th>
+        <th style="background-color:E0D9D9">Eliminar</th>
       </tr>
     </thead>
     <tbody>
-    <?php if($notas): ?>
-      <?php foreach($notas as $nota):?>
-      <tr> <td><?=$nota[0]?></td>
-      <td><?=$nota[1]?></td>
-      <td><?= $nota[2]*100 ."%" ?></td>
+    <?php if($estudiantes): ?>
+      <?php foreach($estudiantes as $estu):?>
+      <tr> <td><?=$estu[0]?></td>
+       <td><?=$estu[2]?></td>
 
-       <td><form action="actualizarNota.php" method="POST">
-          <input type="hidden" name="cod_nota" value="<?=$nota[3]?>">
-          <input type="hidden" name="cod_cur" value="<?=$_POST['cod_cur']?>">
-          <input type="hidden" name="descripcion" value="<?=$nota[1]?>">
-          <input type="hidden" name="porcentaje" value="<?=$nota[2]?>">
-          <input type="hidden" name="posicion" value="<?=$nota[0]?>">
-
-      <center><button type="submit" style="padding-top:15px; border: none; background: none;"><i class="fa fa-pencil" style="color: #3498DB;"></i></button></center>
-        </form></td>
-
-        <td><form action="eliminarNota.php" method="POST">
-          <input type="hidden" name="cod_nota" value="<?=$nota[3]?>">
-      <center><button type="submit" style="padding-top:15px; border: none; background: none;"><i class="fa-solid fa-delete-left fa-2xl" style="color: #d91717;"></i></button></center>
-        </form></td> 
-
-        <td><form action="calificacion.php" method="POST">
-          <input type="hidden" name="cod_nota" value="<?=$nota[3]?>">
-      <center><button type="submit" style="padding-top:15px; border: none; background: none;"><i class="far fa-file-alt" style="color: #F5B041; vertical-alignment: center;" ></i></button></center>
-        </form></td></tr> 
-
-       <?php endforeach; ?>
+       <form action="CalificacionProcesado.php" method="POST">
+        <?php foreach($calificaciones as $cali):?>  
+        <td style="text-align: center;"><input type="text" style="width: 50px;" placeholder="nota" name="valor" value="<?=$cali[1]?>">
+        <?php endforeach; ?>
+        <?php foreach($nota as $notas):?>  
+          <input type="hidden" name="nota" value="<?=$notas[0]?>">
+          <?php endforeach; ?>
+          <input type="hidden" name="cod_insc" value="<?=$estu[0]?>">
+          </td>     
+          <td><center><button type="submit" style="padding-top:-15px; border: none; background: none;"><i class="fa-solid fa-floppy-disk fa-2xl" style="color: #1bda28;"></i></button></center></td>
+          <td><center><button type="submit" style="padding-top:15px; border: none; background: none;"><i class="fa-solid fa-delete-left fa-2xl" style="color: #d91717;"></i></button></center></td>
+        </form></tr> 
+       
+        <?php endforeach; ?>
        <?php else:  ?>
           <tr>
-                <td colspan="6" style="text-align:center">NO HAY REGISTROS</td>
+                <td colspan="3" style="text-align:center">NO HAY REGISTROS</td>
             </tr>
         <?php endif; ?>
     </tbody>
-  </table>
-</div>
-<?php endif; ?>
+</table>
 
-  <br><br>
+<label>
   </main>
 </body>
 </html>

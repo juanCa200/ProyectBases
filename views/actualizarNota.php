@@ -204,8 +204,8 @@ require_once "../controllers/controllerGeneral.php";
             <label for="year">Escriba la nueva descripcion:</label>
             <input type="text" name="descripcion" placeholder="<?=$_POST['descripcion']?>" required>
             <br>
-            <label for="year">Escriba el nuevo porcentaje (%):</label>
-            <input type="text" name="porcentaje" placeholder="<?=$_POST['porcentaje']*100 ."%"?>" required>
+            <label for="year">Escriba el nuevo porcentaje:</label>
+            <input type="text" name="porcentaje" placeholder="%" required>
             <br>
             <label for="year">Escriba la nueva posición:</label>
             <input type="text" name="posicion" placeholder="<?=$_POST['posicion']?>" required>
@@ -220,7 +220,7 @@ require_once "../controllers/controllerGeneral.php";
 if ($obj->validarPorcentajeActualizar($_POST['porcentaje']*0.01,$_POST['cod_cur'],$_POST['cod_nota']) && strlen($_POST['descripcion'])<=20 && $obj->validarPosicionActualizar($_POST['cod_cur'],$_POST['posicion'],$_POST['cod_nota']) ) {
 
     $obj->actualizarNota($_POST['cod_nota'],$_POST['cod_cur'],$_POST['descripcion'],$_POST['porcentaje']*0.01,$_POST['posicion']);
-    echo"Actualizacion Exitosa!";
+    echo("Nota Actualizada!");
 }
 else if ($obj->validarPorcentajeActualizar($_POST['porcentaje']*0.01,$_POST['cod_cur'],$_POST['cod_nota']) == false) {
   echo  "El porcentaje total es mayor al 100%, ingrese los datos nuevamente por favor";

@@ -217,6 +217,12 @@ class modelGeneral {
         return $stmt->execute();
     }
 
+    public function getCalificaciones($cod_nota){
+        $query = "select i.cod_est, e.nomb_est, c.valor, c.cod_cal from inscripciones i left join estudiantes e on i.cod_est = e.cod_est left join calificaciones c on c.nota = c.nota where nota = $cod_nota;";
+        $stmt = $this->conn->prepare($query);
+        return $stmt->execute();
+    }
+
 
 
 
