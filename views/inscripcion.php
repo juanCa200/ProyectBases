@@ -127,7 +127,7 @@ body {
 <?php 
 
 
-if (is_int(intval($_POST['cod_est'])) &&  intval($_POST['anio']) > 0  &&  $obj->validarCodEst($_POST['cod_est']) && $obj->validarInscripcion($_POST['cod_est'],$_POST['cod_cur'],$_POST['periodo'],$_POST['anio']) ) {
+if (intval($_POST['cod_est']) > 0 &&  intval($_POST['anio']) > 0  &&  $obj->validarCodEst($_POST['cod_est']) && $obj->validarInscripcion($_POST['cod_est'],$_POST['cod_cur'],$_POST['periodo'],$_POST['anio']) ) {
 
     $obj->InscripcionPorCurso($_POST['cod_est'],$_POST['cod_cur'],$_POST['periodo'],$_POST['anio']);
     echo"Registro Exitoso!";

@@ -1,3 +1,8 @@
+<?php
+require_once '../controllers/controllerGeneral.php';
+$obj = new controllerGeneral();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -90,16 +95,40 @@
     </div>
     <div class="row row-cols-1 g-4">
 
-      <form action="registroEstudiante.php" method="POST" style="max-width: 400px; margin: 0 auto; background-color: #eef2f5; padding: 20px; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">
+    <?php if(isset($_POST['submit'])):?>
+<?php 
+
+if (intval($_POST['cod_est']) > 0 && $obj->validarCodEst($_POST['cod_est']) == false) {
+
+    $obj->saveEstudiantes($_POST['cod_est'],$_POST['nomb_est']);
+    echo"Registro Exitoso!";
+}
+else if (intval($_POST['cod_est']) <= 0) {
+  echo  "Ingrese un codigo valido por favor";
+}
+else if ($obj->validarCodEst($_POST['cod_est'])) {
+  echo  "Ya existe un estudiante con ese codigo";
+}
+else{
+  echo  "Los datos son incorrectos, ingreselos nuevamente por favor";
+}
+
+
+?>
+<?php endif; ?>
+
+      <form action="registro.php" method="POST" style="max-width: 400px; margin: 0 auto; background-color: #eef2f5; padding: 20px; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);">
         <h2 style="text-align: center; margin-bottom: 20px; color: #333; font-family: Arial, sans-serif;">Formulario Estudiantil</h2>
         <div style="margin-bottom: 20px;">
-          <input name="cod_est" type="text" placeholder="Código Estudiantil" required style="width: 100%; padding: 10px; border: none; border-bottom: 2px solid #007bff; background-color: #eef2f5; color: #333; font-size: 16px;">
+          <input name="cod_est" type="text" placeholder="Código Estudiantil" required style="width: 100%; padding: 10px; border: none; border-bottom: 2px solid #007bff; background-color: #eef2f5; color: #333; font-size: 16px;" required>
         </div>
         <div style="margin-bottom: 20px;">
-          <input name="nomb_est" type="text" placeholder="Nombre del Estudiante" required style="width: 100%; padding: 10px; border: none; border-bottom: 2px solid #007bff; background-color: #eef2f5; color: #333; font-size: 16px;">
+          <input name="nomb_est" type="text" placeholder="Nombre del Estudiante" required style="width: 100%; padding: 10px; border: none; border-bottom: 2px solid #007bff; background-color: #eef2f5; color: #333; font-size: 16px;" required>
         </div>
-        <button type="submit" style="width: 100%; padding: 10px; background-color: #007bff; color: #fff; border: none; border-radius: 3px; cursor: pointer; font-size: 16px;">Enviar</button>
+        <button type="submit" name="submit" style="width: 100%; padding: 10px; background-color: #007bff; color: #fff; border: none; border-radius: 3px; cursor: pointer; font-size: 16px;">Enviar</button>
       </form>
+                
+
 
       <!-- Agregar una línea decorativa -->
       <hr style="border: none; border-top: 1px dashed #ccc; margin: 40px 0;">
