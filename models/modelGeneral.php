@@ -175,6 +175,21 @@ class modelGeneral {
         }
     }
 
+    public function validarPosicionActualizar($cod_cur,$posicion,$cod_nota){
+
+        $query = $this->conn->query("select count(*) from notas where cod_cur = $cod_cur and posicion = $posicion and nota != $cod_nota");
+        
+        foreach($query as $row){
+            $count = $row[0];
+        }
+
+        if ($count == 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public function eliminarNota($cod_nota) {
         // Preparar la consulta de inserción
         $query = "DELETE FROM notas WHERE nota = '$cod_nota'";

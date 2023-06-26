@@ -222,10 +222,10 @@ require_once "../controllers/controllerGeneral.php";
 <?php if(isset($_POST['submit'])):?>
 <?php 
 
-if ($obj->validarPorcentajeActualizar($_POST['porcentaje']*0.01,$_POST['cod_cur'],$_POST['cod_nota']) && strlen($_POST['descripcion'])<=20 && $obj->validarPosicion($_POST['cod_cur'],$_POST['posicion']) ) {
+if ($obj->validarPorcentajeActualizar($_POST['porcentaje']*0.01,$_POST['cod_cur'],$_POST['cod_nota']) && strlen($_POST['descripcion'])<=20 && $obj->validarPosicionActualizar($_POST['cod_cur'],$_POST['posicion'],$_POST['cod_nota']) ) {
 
     $obj->actualizarNota($_POST['cod_nota'],$_POST['cod_cur'],$_POST['descripcion'],$_POST['porcentaje']*0.01,$_POST['posicion']);
-    echo"Registro Exitoso!";
+    echo"Actualizacion Exitosa!";
 }
 else if ($obj->validarPorcentajeActualizar($_POST['porcentaje']*0.01,$_POST['cod_cur'],$_POST['cod_nota']) == false) {
   echo  "El porcentaje total es mayor al 100%, ingrese los datos nuevamente por favor";
@@ -233,7 +233,7 @@ else if ($obj->validarPorcentajeActualizar($_POST['porcentaje']*0.01,$_POST['cod
 else if (strlen($_POST['descripcion']) > 20) {
   echo  "La descripcion es muy larga, ingrese los datos nuevamente por favor";
 }
-else if ($obj->validarPosicion($_POST['cod_cur'],$_POST['posicion']) == false) {
+else if ($obj->validarPosicionActualizar($_POST['cod_cur'],$_POST['posicion'],$_POST['cod_nota']) == false) {
   echo  "La posicion ingresada ya está tomada, ingrese los datos nuevamente por favor";
 }
 else{

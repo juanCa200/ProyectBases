@@ -68,6 +68,10 @@ class controllerGeneral {
         return ($this->model->validarPosicion($cod_cur,$posicion)) ? $this->model->validarPosicion($cod_cur,$posicion): false;
     }
 
+    public function validarPosicionActualizar($cod_cur,$posicion,$cod_nota){
+        return ($this->model->validarPosicionActualizar($cod_cur,$posicion,$cod_nota)) ? $this->model->validarPosicionActualizar($cod_cur,$posicion,$cod_nota): false;
+    }
+
     public function eliminarNota($cod_nota) {
         $this->model->eliminarNota($cod_nota);
         header('Location: /app/views/planeacion.php'); 
