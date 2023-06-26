@@ -248,17 +248,17 @@ require_once "../controllers/controllerGeneral.php";
       <td><?= $nota[2]*100 ."%" ?></td>
 
        <td><form action="planeacion.php" method="POST">
-          <input type="hidden" name="cod_est" value="<?=$nota[0]?>">
+          <input type="hidden" name="cod_nota" value="<?=$nota[3]?>">
       <center><button type="submit" style="padding-top:15px; border: none; background: none;"><i class="fa fa-pencil" style="color: #3498DB;"></i></button></center>
         </form></td>
 
         <td><form action="eliminarNota.php" method="POST">
-          <input type="hidden" name="cod_est" value="<?=$nota[0]?>">
+          <input type="hidden" name="cod_nota" value="<?=$nota[3]?>">
       <center><button type="submit" style="padding-top:15px; border: none; background: none;"><i class="fa-solid fa-delete-left fa-2xl" style="color: #d91717;"></i></button></center>
         </form></td> 
 
         <td><form action="registrarCalificacion.php" method="POST">
-          <input type="hidden" name="cod_est" value="<?=$nota[0]?>">
+          <input type="hidden" name="cod_nota" value="<?=$nota[3]?>">
       <center><button type="submit" style="padding-top:15px; border: none; background: none;"><i class="far fa-file-alt" style="color: #F5B041; vertical-alignment: center;" ></i></button></center>
         </form></td></tr> 
 

@@ -153,5 +153,12 @@ class modelGeneral {
         }
     }
 
+    public function eliminarNota($cod_nota) {
+        // Preparar la consulta de inserción
+        $query = "DELETE FROM notas WHERE nota = '$cod_nota'";
+        $stmt = $this->conn->prepare($query);
+        return $stmt->execute();
+    }
+
 }
 ?>
