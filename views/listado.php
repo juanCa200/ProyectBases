@@ -1,16 +1,3 @@
-<!--Llamamos el metodo obtener estudiantes de la clase control general
-    Esto se hace para mostrar los datos en pantalla que vienen de la base de datos-->
-<?php
-require_once "../controllers/controllerGeneral.php";
-    $obj=new controllerGeneral();
-    
-    
-    $date = getdate();
-    echo"<p>".$date['mday']."/".$date['month']."/".$date['year']."</p>";
-
-    $estudiantes = $obj->getEstudiantes($_POST['cod_cur'],$_POST['year'],$_POST['periodo']);
-    
-?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -147,6 +134,17 @@ require_once "../controllers/controllerGeneral.php";
       <br>
       <div class="row row-cols-1 g-4">
       
+<?php
+    require_once "../controllers/controllerGeneral.php";
+    $obj=new controllerGeneral();
+    
+    if(intval(!is_numeric($_POST['year'])) || $_POST['year']<= 0 ){
+      header('Location: /app/views/SelectCurso.php'); 
+    }else {
+      $estudiantes = $obj->getEstudiantes($_POST['cod_cur'],$_POST['year'],$_POST['periodo']);
+    }
+
+?>
 <div class="table-container">
   <table class="data-table">
     <thead>
@@ -167,14 +165,18 @@ require_once "../controllers/controllerGeneral.php";
         </form></td></tr> 
        <?php endforeach; ?>
        <?php else:  ?>
-          <tr>
+          
+              <tr>
                 <td colspan="3" style="text-align:center">NO HAY REGISTROS</td>
             </tr>
+            
         <?php endif; ?>
     </tbody>
   </table>
 </div>
- <br><br><br>
+      <br><br>
+      <input type='button'  name='Volver Atrás' value='Volver Atrás' onclick=location.href='http://localhost/app/views/SelectCurso.php'><br>
+      <br>
       </div>
     </div>
   </main>
