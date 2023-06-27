@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -184,13 +182,37 @@
 
   <main class="content">
   <?php
-require_once "../controllers/controllerGeneral.php";
+    require_once "../controllers/controllerGeneral.php";
     $obj = new controllerGeneral();
-    $calificaciones = $obj->getCalificaciones($_POST['cod_nota']);
-    print_r($calificaciones);
+
+    if(isset($_POST['guardar'])){
+      if(isset($_POST['cod_nota']) ){
+        if(is_numeric($_POST['valor']) && $_POST['valor'] <= 5 && $_POST['valor'] >= 0){
+            if($obj->validarValor($_POST['cod_insc'],$_POST['cod_nota'])){
+              $obj->eliminarCalificacion($_POST['cod_cal']);
+              $obj->registgrarCalificacion($_POST['valor'],$_POST['cod_nota'],$_POST['cod_insc']);
+            }
+            else {
+              $obj->registgrarCalificacion($_POST['valor'],$_POST['cod_nota'],$_POST['cod_insc']);
+            }
+            
+            
+        }
+      }
+    }
+    if(isset($_POST['eliminar']) ){
+      $obj->eliminarCalificacion($_POST['cod_cal']);
+    }
+
+    $calificaciones = $obj->getCalificaciones($_POST['cod_nota'],$_POST['cod_cur']);
+    
 ?>
 
 <div class="row row-cols-1 g-4">
+
+<center><input type='button'  name='Volver Atrás' value='Volver Atrás' onclick=location.href='http://localhost/app/views/planeacion.php'><br></center>
+
+<h1>Calificacion del curso <?=$obj->getNombCur($_POST['cod_cur']) ?><br>con la nota <br><?=$obj->getNombNota($_POST['cod_nota']) ?></h1></center>
 
 
 <table class="data-table">
@@ -199,37 +221,35 @@ require_once "../controllers/controllerGeneral.php";
         <th style="background-color:E0D9D9">Codigo</th>
         <th style="background-color:E0D9D9">Nombre</th>
         <th style="background-color:E0D9D9">Nota</th>
-        <th style="background-color:E0D9D9">Insertar</th>
         <th style="background-color:E0D9D9">Guardar</th>
         <th style="background-color:E0D9D9">Eliminar</th>
       </tr>
     </thead>
     <tbody>
-    <?php if($estudiantes): ?>
-      <?php foreach($estudiantes as $estu):?>
-      <tr> <td><?=$estu[0]?></td>
-       <td><?=$estu[2]?></td>
+    <?php if($calificaciones): ?>
+      <?php foreach($calificaciones as $calificacion):?>
+      <tr> <td><?=$calificacion[0]?></td>
+       <td><?=$calificacion[1]?></td>
 
-       <form action="CalificacionProcesado.php" method="POST">
-        <?php foreach($calificaciones as $cali):?>  
-        <td style="text-align: center;"><input type="text" style="width: 50px;" placeholder="nota" name="valor" value="<?=$cali[1]?>">
-        <?php endforeach; ?>
-        <?php foreach($nota as $notas):?>  
-          <input type="hidden" name="nota" value="<?=$notas[0]?>">
-          <?php endforeach; ?>
-          <input type="hidden" name="cod_insc" value="<?=$estu[0]?>">
-          </td>     
-          <td><center><button type="submit" style="padding-top:-15px; border: none; background: none;"><i class="fa-solid fa-floppy-disk fa-2xl" style="color: #1bda28;"></i></button></center></td>
-          <td><center><button type="submit" style="padding-top:15px; border: none; background: none;"><i class="fa-solid fa-delete-left fa-2xl" style="color: #d91717;"></i></button></center></td>
-        </form></tr> 
-       
+
+       <form action="calificacion.php" method="POST">
+        
+          <input type="hidden" name="cod_cal" value="<?=$calificacion[5]?>">
+          <input type="hidden" name="cod_insc" value="<?=$calificacion[4]?>">
+          <input type="hidden" name="cod_nota" value="<?=$_POST['cod_nota']?>">
+          <input type="hidden" name="cod_cur" value="<?=$_POST['cod_cur']?>">
+
+          <td style="text-align: center;"><input type="text" style="width: 50px;" placeholder="nota" name="valor" value="<?=$calificacion[2]?>"></td>
+          <td><center><button type="submit" name="guardar" style="padding-top:-15px; border: none; background: none;"><i class="fa-solid fa-floppy-disk fa-2xl" style="color: #1bda28;"></i></button></center></td>
+          <td><center><button type="submit" name="eliminar" style="padding-top:15px; border: none; background: none;"><i class="fa-solid fa-delete-left fa-2xl" style="color: #d91717;"></i></button></center></td>
+        </form></tr>        
         <?php endforeach; ?>
        <?php else:  ?>
           <tr>
-                <td colspan="3" style="text-align:center">NO HAY REGISTROS</td>
+                <td colspan="5" style="text-align:center">NO HAY REGISTROS</td>
             </tr>
         <?php endif; ?>
-    </tbody>
+     </tbody>
 </table>
 
 <label>

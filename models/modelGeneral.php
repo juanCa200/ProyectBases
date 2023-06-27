@@ -69,7 +69,6 @@ class modelGeneral {
         
     }
     
-########poner el checkInscripcion en el view para mostrar el error
     public function InscribirEstudiante($cod_est,$cod_cur,$periodo,$anio){
         try {
             $query = "INSERT INTO inscripciones(periodo,year,cod_cur,cod_est) values ($periodo, $anio, $cod_cur,$cod_est)";
@@ -217,12 +216,73 @@ class modelGeneral {
         return $stmt->execute();
     }
 
-    public function getCalificaciones($cod_nota){
-        $query = "select i.cod_est, e.nomb_est, c.valor, c.cod_cal from inscripciones i left join estudiantes e on i.cod_est = e.cod_est left join calificaciones c on c.nota = c.nota where nota = $cod_nota;";
+    public function getCalificaciones($cod_nota,$cod_cur){
+        $query = "select i.cod_est,e.nomb_est,c.valor,c.nota,i.cod_insc,c.cod_cal from inscripciones i left join calificaciones c on i.cod_insc = c.cod_insc join estudiantes e on e.cod_est = i.cod_est where cod_cur = $cod_cur and nota = $cod_nota or nota is null and cod_cur = $cod_cur order by e.nomb_est;";
+        $stmt = $this->conn->prepare($query);
+        return($stmt->execute()) ? $stmt->fetchAll(): false;
+    }
+
+    public function registgrarCalificacion($valor,$nota,$cod_insc){
+        try {
+            $fecha = date('Y-m-d');
+            $query = "INSERT into calificaciones (valor,fecha,nota,cod_insc) values ($valor,'$fecha',$nota,$cod_insc);";
+            $stmt = $this->conn->prepare($query);    
+            return $stmt->execute();
+            }
+        
+        catch (PDOException $exception){
+            return 'Error: ' . $exception->getMessage();
+        }
+
+    }
+
+    public function eliminarCalificacion($cod_cal) {
+        // Preparar la consulta de inserción
+        $query = "DELETE FROM calificaciones WHERE cod_cal = '$cod_cal'";
         $stmt = $this->conn->prepare($query);
         return $stmt->execute();
     }
 
+    public function validarCalificacion($cod_insc){
+
+        $query = $this->conn->query("select count(*) from calificaciones where cod_insc = $cod_insc;");
+        
+        foreach($query as $row){
+            $count = $row[0];
+        }
+
+        if ($count == 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function getNombNota($cod_nota){
+        
+        $query = $this->conn->query("SELECT descrip_nota from notas  where nota = $cod_nota;");
+       
+        foreach($query as $row){
+            $nomb_cur = $row[0];
+        }
+
+        return $nomb_cur;
+    }
+
+    public function validarValor($cod_insc, $nota){
+
+        $query = $this->conn->query("select count(*) from calificaciones where cod_insc = $cod_insc and nota = $nota;");
+        
+        foreach($query as $row){
+            $count = $row[0];
+        }
+
+        if ($count == 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 
 

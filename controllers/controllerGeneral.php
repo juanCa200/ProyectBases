@@ -86,9 +86,29 @@ class controllerGeneral {
         $this->model->actualizarNota($cod_nota,$cod_cur,$descrip_nota,$porcentaje,$posicion);
     }
 
-    public function getCalificaciones($cod_nota) {
-        return ($this->model->getCalificaciones($cod_nota));
+    public function getCalificaciones($cod_nota,$cod_cur) {
+        return ($this->model->getCalificaciones($cod_nota,$cod_cur));
         }
+    
+    public function registgrarCalificacion($valor,$nota,$cod_insc){
+        return ($this->model->registgrarCalificacion($valor,$nota,$cod_insc));
+    }
+
+    public function eliminarCalificacion($cod_cal){
+        $this->model->eliminarCalificacion($cod_cal);
+    }
+
+    public function validarCalificacion($cod_insc){
+        return ($this->model->validarCalificacion($cod_insc));
+    }
+
+    public function getNombNota($cod_nota){
+        return ($this->model->getNombNota($cod_nota));
+    }
+
+    public function validarValor($cod_insc, $nota){
+        return ($this->model->validarValor($cod_insc, $nota));
+    }
     
 }
 ?>

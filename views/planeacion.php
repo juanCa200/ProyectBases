@@ -256,6 +256,7 @@ require_once "../controllers/controllerGeneral.php";
 
         <td><form action="calificacion.php" method="POST">
           <input type="hidden" name="cod_nota" value="<?=$nota[3]?>">
+          <input type="hidden" name="cod_cur" value="<?=$_POST['cod_cur']?>">
       <center><button type="submit" style="padding-top:15px; border: none; background: none;"><i class="far fa-file-alt" style="color: #F5B041; vertical-alignment: center;" ></i></button></center>
         </form></td></tr> 
 
