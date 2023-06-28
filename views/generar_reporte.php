@@ -74,3 +74,5 @@ $pdf->writeHTML($html, true, false, true, false, '');
 $pdf->Output('reporte.pdf', 'I');
 }
 ?>
+
+

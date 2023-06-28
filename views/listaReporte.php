@@ -9,7 +9,9 @@ require_once "../controllers/controllerGeneral.php";
       $estudiantes=$obj->obtenerEstudiantesPorCurso($_POST['cod_cur'],$_POST['year'],$_POST['periodo']);
       $notas=$obj->obtenerNotasPorCurso($_POST['cod_cur']);
     }
+
     
+        
 ?>
 
 <!DOCTYPE html>
