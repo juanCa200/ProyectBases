@@ -1,18 +1,15 @@
 <?php
-/* Esto es para que muestre los Errores en pantalla, cuando tenga */
 ini_set('display_errors', 'On');
 error_reporting(E_ALL);
 
 class controllerGeneral {
     private $model;
 
-    /* Inicializamos LA VARIABLE $model con el objeto model para llamar las funciones del modelo general*/
     public function __construct() {
         require_once '../models/modelGeneral.php';
         $this->model = new modelGeneral();
     }
 
-    /* Para guardar, por ahora no usamos la funcion pero asi funciona */
     public function saveEstudiantes($cod_est,$nomb_est) {
             $this->model->createEstudiante($cod_est,$nomb_est);
         }

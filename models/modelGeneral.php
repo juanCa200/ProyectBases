@@ -11,7 +11,6 @@ class modelGeneral {
     }
 
     public function createEstudiante($codEst,$nombEst) {
-        // Preparar la consulta de inserción
         $query = "INSERT INTO estudiantes(cod_est, nomb_est) VALUES (:cod_est,:nomb_est)";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':cod_est', $codEst);
@@ -21,24 +20,43 @@ class modelGeneral {
     
     
     public function eliminarEstudiantes($cod_est) {
-        // Preparar la consulta de inserción
         $query = "DELETE FROM inscripciones 
                   WHERE cod_est = '$cod_est'";
         $stmt = $this->conn->prepare($query);
         return $stmt->execute();
     }
-    
-        public function obtenerNotasPorCurso($cod_cur) {
-        $query = "SELECT descrip_nota, porcentaje 
-                  FROM notas 
-                  WHERE cod_cur = :cod_curso";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':cod_curso', $cod_cur, PDO::PARAM_INT);
-        $stmt->execute();
-        $notas = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        return $notas;
+
+    public function getEstudiantes($cod_cur,$year,$periodo){
+
+        if ($cod_cur && $year && $periodo) {
+            $query = "SELECT i.cod_est, e.nomb_est 
+                      FROM inscripciones i 
+                      join estudiantes e 
+                      on i.cod_est = e.cod_est 
+                      where cod_cur = $cod_cur 
+                      and year = $year 
+                      and periodo = $periodo";
+            $stmt = $this->conn->prepare($query);
+            return($stmt->execute()) ? $stmt->fetchAll(): false;
+        }else {
+            return 0;
+        }
+        
     }
 
+    
+    public function obtenerNotasPorCurso($cod_cur) {
+    $query = "SELECT descrip_nota, porcentaje 
+                FROM notas 
+                WHERE cod_cur = :cod_curso";
+    $stmt = $this->conn->prepare($query);
+    $stmt->bindParam(':cod_curso', $cod_cur, PDO::PARAM_INT);
+    $stmt->execute();
+    $notas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $notas;
+    }
+
+    
 
     public function obtenerEstudiantesPorCurso($cod_cur,$year,$periodo) {
         $query = "SELECT e.cod_est, e.nomb_est, c.valor, n.descrip_nota, n.porcentaje
@@ -93,24 +111,6 @@ class modelGeneral {
     }
 
 
-    public function getEstudiantes($cod_cur,$year,$periodo){
-
-        if ($cod_cur && $year && $periodo) {
-            $query = "SELECT i.cod_est, e.nomb_est 
-                      FROM inscripciones i 
-                      join estudiantes e 
-                      on i.cod_est = e.cod_est 
-                      where cod_cur = $cod_cur 
-                      and year = $year 
-                      and periodo = $periodo";
-            $stmt = $this->conn->prepare($query);
-            return($stmt->execute()) ? $stmt->fetchAll(): false;
-        }else {
-            return 0;
-        }
-        
-    }
-
     public function getPlaneacion($cod_cur){
 
         if ($cod_cur) {
@@ -160,19 +160,6 @@ class modelGeneral {
         }
     }
 
-    public function getNombCur($cod_cur){
-        
-        $query = $this->conn->query("SELECT nomb_cur 
-                                    from cursos 
-                                    where cod_cur = $cod_cur;");
-       
-        foreach($query as $row){
-            $nomb_cur = $row[0];
-        }
-
-        return $nomb_cur;
-    }
-
     public function validarPorcentaje($porcentaje,$cod_cur){
 
         $query = $this->conn->query("SELECT SUM(porcentaje)
@@ -214,20 +201,6 @@ class modelGeneral {
         } else {
             return false;
         }
-    }
-
-
-    public function agregarNota($cod_cur,$descrip_nota,$porcentaje,$posicion){
-        try {
-                $query = "INSERT INTO notas(cod_cur,descrip_nota,porcentaje,posicion)
-                          values ($cod_cur,'$descrip_nota',$porcentaje,$posicion);";
-                $stmt = $this->conn->prepare($query);    
-                return $stmt->execute();
-        }
-        catch (PDOException $exception){
-            return 'Error: ' . $exception->getMessage();
-        }
-
     }
 
     public function validarPosicion($cod_cur,$posicion){
@@ -278,6 +251,41 @@ class modelGeneral {
         }
 
         if ($count == 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function validarValor($cod_insc, $nota){
+
+        $query = $this->conn->query("SELECT count(*)
+                                     from calificaciones
+                                     where cod_insc = $cod_insc
+                                     and nota = $nota;");
+        
+        foreach($query as $row){
+            $count = $row[0];
+        }
+
+        if ($count == 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function validarCalificacion($cod_insc){
+
+        $query = $this->conn->query("SELECT count(*)
+                                     from calificaciones 
+                                     where cod_insc = $cod_insc;");
+        
+        foreach($query as $row){
+            $count = $row[0];
+        }
+
+        if ($count == 1) {
             return true;
         } else {
             return false;
@@ -350,21 +358,31 @@ class modelGeneral {
         return $stmt->execute();
     }
 
-    public function validarCalificacion($cod_insc){
 
-        $query = $this->conn->query("SELECT count(*)
-                                     from calificaciones 
-                                     where cod_insc = $cod_insc;");
+    public function agregarNota($cod_cur,$descrip_nota,$porcentaje,$posicion){
+        try {
+                $query = "INSERT INTO notas(cod_cur,descrip_nota,porcentaje,posicion)
+                          values ($cod_cur,'$descrip_nota',$porcentaje,$posicion);";
+                $stmt = $this->conn->prepare($query);    
+                return $stmt->execute();
+        }
+        catch (PDOException $exception){
+            return 'Error: ' . $exception->getMessage();
+        }
+
+    }
+
+    public function getNombCur($cod_cur){
         
+        $query = $this->conn->query("SELECT nomb_cur 
+                                    from cursos 
+                                    where cod_cur = $cod_cur;");
+       
         foreach($query as $row){
-            $count = $row[0];
+            $nomb_cur = $row[0];
         }
 
-        if ($count == 1) {
-            return true;
-        } else {
-            return false;
-        }
+        return $nomb_cur;
     }
 
     public function getNombNota($cod_nota){
@@ -379,25 +397,6 @@ class modelGeneral {
 
         return $nomb_cur;
     }
-
-    public function validarValor($cod_insc, $nota){
-
-        $query = $this->conn->query("SELECT count(*)
-                                     from calificaciones
-                                     where cod_insc = $cod_insc
-                                     and nota = $nota;");
-        
-        foreach($query as $row){
-            $count = $row[0];
-        }
-
-        if ($count == 1) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
 
 
 }
