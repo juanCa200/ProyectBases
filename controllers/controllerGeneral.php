@@ -85,6 +85,16 @@ class controllerGeneral {
     public function actualizarNota($cod_nota,$cod_cur,$descrip_nota,$porcentaje,$posicion){
         $this->model->actualizarNota($cod_nota,$cod_cur,$descrip_nota,$porcentaje,$posicion);
     }
+    
+    
+  public function obtenerNotasPorCurso($cod_cur) {
+    return ($this->model->obtenerNotasPorCurso($cod_cur)) ? $this->model->obtenerNotasPorCurso($cod_cur): false;
+    }  
+
+    public  function obtenerEstudiantesPorCurso($cod_cur) {
+            return ($this->model->obtenerEstudiantesPorCurso($cod_cur)) ? $this->model->obtenerEstudiantesPorCurso($cod_cur): false;
+           }
+     
 
     public function getCalificaciones($cod_nota,$cod_cur) {
         return ($this->model->getCalificaciones($cod_nota,$cod_cur));

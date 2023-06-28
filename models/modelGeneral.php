@@ -18,6 +18,57 @@ class modelGeneral {
         $stmt->bindParam(':nomb_est', $nombEst);
         return $stmt->execute();
     }
+    
+    
+    public function eliminarEstudiantes($cod_est) {
+        // Preparar la consulta de inserción
+        $query = "DELETE FROM inscripciones WHERE cod_est = '$cod_est'";
+        $stmt = $this->conn->prepare($query);
+        return $stmt->execute();
+    }
+    
+        public function obtenerNotasPorCurso($cod_cur) {
+        $query = "SELECT descrip_nota, porcentaje FROM notas WHERE cod_cur = :cod_curso";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':cod_curso', $cod_cur, PDO::PARAM_INT);
+        $stmt->execute();
+        $notas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $notas;
+    }
+
+
+    public function obtenerEstudiantesPorCurso($cod_cur) {
+        $query = "SELECT e.cod_est, e.nomb_est, c.valor, n.descrip_nota, n.porcentaje
+                  FROM estudiantes e 
+                  JOIN inscripciones i ON e.cod_est = i.cod_est
+                  JOIN calificaciones c ON i.cod_insc = c.cod_insc
+                  JOIN notas n ON n.nota = c.nota 
+                  WHERE i.cod_cur = :cod_curso 
+                  ORDER BY e.cod_est";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':cod_curso', $cod_cur, PDO::PARAM_INT);
+        $stmt->execute();
+    
+        $estudiantes = array();
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $cod_est = $row['cod_est'];
+            $nomb_est = $row['nomb_est'];
+            $valor = $row['valor'];
+            $descrip_nota = $row['descrip_nota'];
+            $porcentaje = $row['porcentaje'];
+    
+            $nota = array('valor' => $valor, 'porcentaje' => $porcentaje);
+    
+            if (!isset($estudiantes[$cod_est])) {
+                $estudiantes[$cod_est] = array('nombre' => $nomb_est, 'notas' => array());
+            }
+    
+            $estudiantes[$cod_est]['notas'][$descrip_nota] = $nota;
+        }
+    
+        return $estudiantes;
+    }
+
 
     public function eliminarEstudiantes($cod_est) {
         // Preparar la consulta de inserción
