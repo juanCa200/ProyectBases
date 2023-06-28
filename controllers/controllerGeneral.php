@@ -91,8 +91,8 @@ class controllerGeneral {
     return ($this->model->obtenerNotasPorCurso($cod_cur)) ? $this->model->obtenerNotasPorCurso($cod_cur): false;
     }  
 
-    public  function obtenerEstudiantesPorCurso($cod_cur) {
-            return ($this->model->obtenerEstudiantesPorCurso($cod_cur)) ? $this->model->obtenerEstudiantesPorCurso($cod_cur): false;
+    public function obtenerEstudiantesPorCurso($cod_cur,$year,$periodo){
+            return ($this->model->obtenerEstudiantesPorCurso($cod_cur,$year,$periodo)) ? $this->model->obtenerEstudiantesPorCurso($cod_cur,$year,$periodo): false;
            }
      
 

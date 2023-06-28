@@ -191,7 +191,7 @@ require_once "../controllers/controllerGeneral.php";
 <div class="row row-cols-1 g-4">
       
 <div class="contenedor">
-        <h1>Formulario</h1>
+        <h1>Notas</h1>
         <form action="planeacion.php" method="POST">
             <label for="cod_cur">Seleccione El curso:</label>
             <select name="cod_cur">

@@ -8,7 +8,7 @@
     // Incluir el archivo del controlador y obtener los datos necesarios
     require_once "../controllers/controllerGeneral.php";
     $obj = new controllerGeneral();
-    $estudiantes = $obj->obtenerEstudiantesPorCurso($cod_cur);
+    $estudiantes=$obj->obtenerEstudiantesPorCurso($_POST['cod_cur'],$_POST['year'],$_POST['periodo']);
     $notas = $obj->obtenerNotasPorCurso($cod_cur);
     
 require_once('../views/tcpdf/tcpdf.php');

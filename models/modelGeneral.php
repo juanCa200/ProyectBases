@@ -22,13 +22,16 @@ class modelGeneral {
     
     public function eliminarEstudiantes($cod_est) {
         // Preparar la consulta de inserción
-        $query = "DELETE FROM inscripciones WHERE cod_est = '$cod_est'";
+        $query = "DELETE FROM inscripciones 
+                  WHERE cod_est = '$cod_est'";
         $stmt = $this->conn->prepare($query);
         return $stmt->execute();
     }
     
         public function obtenerNotasPorCurso($cod_cur) {
-        $query = "SELECT descrip_nota, porcentaje FROM notas WHERE cod_cur = :cod_curso";
+        $query = "SELECT descrip_nota, porcentaje 
+                  FROM notas 
+                  WHERE cod_cur = :cod_curso";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':cod_curso', $cod_cur, PDO::PARAM_INT);
         $stmt->execute();
@@ -37,13 +40,15 @@ class modelGeneral {
     }
 
 
-    public function obtenerEstudiantesPorCurso($cod_cur) {
+    public function obtenerEstudiantesPorCurso($cod_cur,$year,$periodo) {
         $query = "SELECT e.cod_est, e.nomb_est, c.valor, n.descrip_nota, n.porcentaje
                   FROM estudiantes e 
                   JOIN inscripciones i ON e.cod_est = i.cod_est
                   JOIN calificaciones c ON i.cod_insc = c.cod_insc
                   JOIN notas n ON n.nota = c.nota 
                   WHERE i.cod_cur = :cod_curso 
+                  AND i.year = $year
+                  AND i.periodo = $periodo
                   ORDER BY e.cod_est";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':cod_curso', $cod_cur, PDO::PARAM_INT);
@@ -69,14 +74,6 @@ class modelGeneral {
         return $estudiantes;
     }
 
-
-    public function eliminarEstudiantes($cod_est) {
-        // Preparar la consulta de inserción
-        $query = "DELETE FROM inscripciones WHERE cod_est = '$cod_est'";
-        $stmt = $this->conn->prepare($query);
-        return $stmt->execute();
-    }
-
     public function getAllcursos() {
         // Preparar la consulta de inserción
         $query = "SELECT * FROM cursos";
@@ -99,7 +96,13 @@ class modelGeneral {
     public function getEstudiantes($cod_cur,$year,$periodo){
 
         if ($cod_cur && $year && $periodo) {
-            $query = "SELECT i.cod_est, e.nomb_est FROM inscripciones i join estudiantes e on i.cod_est = e.cod_est where cod_cur = $cod_cur and year = $year and periodo = $periodo";
+            $query = "SELECT i.cod_est, e.nomb_est 
+                      FROM inscripciones i 
+                      join estudiantes e 
+                      on i.cod_est = e.cod_est 
+                      where cod_cur = $cod_cur 
+                      and year = $year 
+                      and periodo = $periodo";
             $stmt = $this->conn->prepare($query);
             return($stmt->execute()) ? $stmt->fetchAll(): false;
         }else {
@@ -111,7 +114,10 @@ class modelGeneral {
     public function getPlaneacion($cod_cur){
 
         if ($cod_cur) {
-            $query = "SELECT posicion,descrip_nota,porcentaje,nota FROM notas where cod_cur = $cod_cur order by posicion";
+            $query = "SELECT posicion,descrip_nota,porcentaje,nota 
+                      FROM notas 
+                      where cod_cur = $cod_cur 
+                      order by posicion";
             $stmt = $this->conn->prepare($query);
             return($stmt->execute()) ? $stmt->fetchAll(): false;
         }else {
@@ -122,7 +128,8 @@ class modelGeneral {
     
     public function InscribirEstudiante($cod_est,$cod_cur,$periodo,$anio){
         try {
-            $query = "INSERT INTO inscripciones(periodo,year,cod_cur,cod_est) values ($periodo, $anio, $cod_cur,$cod_est)";
+            $query = "INSERT INTO inscripciones(periodo,year,cod_cur,cod_est) 
+                      values ($periodo, $anio, $cod_cur,$cod_est)";
             $stmt = $this->conn->prepare($query);    
             return $stmt->execute();
             }
@@ -135,7 +142,12 @@ class modelGeneral {
 
     public function validarInscripcion($cod_est,$cod_cur,$periodo,$anio){
 
-        $query = $this->conn->query("select count(*) from inscripciones where cod_est = $cod_est and cod_cur = $cod_cur and periodo = $periodo and year = $anio;");
+        $query = $this->conn->query("SELECT count(*)
+                                     from inscripciones 
+                                     where cod_est = $cod_est 
+                                     and cod_cur = $cod_cur 
+                                     and periodo = $periodo 
+                                     and year = $anio;");
         
         foreach($query as $row){
             $count = $row[0];
@@ -150,7 +162,9 @@ class modelGeneral {
 
     public function getNombCur($cod_cur){
         
-        $query = $this->conn->query("SELECT nomb_cur from cursos  where cod_cur = $cod_cur;");
+        $query = $this->conn->query("SELECT nomb_cur 
+                                    from cursos 
+                                    where cod_cur = $cod_cur;");
        
         foreach($query as $row){
             $nomb_cur = $row[0];
@@ -161,7 +175,9 @@ class modelGeneral {
 
     public function validarPorcentaje($porcentaje,$cod_cur){
 
-        $query = $this->conn->query("select SUM(porcentaje) from notas where cod_cur = $cod_cur;");
+        $query = $this->conn->query("SELECT SUM(porcentaje)
+                                     from notas 
+                                     where cod_cur = $cod_cur;");
         
         foreach($query as $row){
             $sum = $row[0];
@@ -176,13 +192,18 @@ class modelGeneral {
 
     public function validarPorcentajeActualizar($porcentaje_nuevo,$cod_cur,$cod_nota){
 
-        $query = $this->conn->query("select SUM(porcentaje) from notas where cod_cur = $cod_cur;");
+        $query = $this->conn->query("SELECT 
+                                     SUM(porcentaje) 
+                                     from notas 
+                                     where cod_cur = $cod_cur;");
         
         foreach($query as $row){
             $sum = $row[0];
         }
 
-        $query = $this->conn->query("select porcentaje from notas where nota = $cod_nota;");
+        $query = $this->conn->query("SELECT porcentaje
+                                     from notas 
+                                     where nota = $cod_nota;");
 
         foreach($query as $row){
             $porcentaje_antiguo = $row[0];
@@ -198,7 +219,8 @@ class modelGeneral {
 
     public function agregarNota($cod_cur,$descrip_nota,$porcentaje,$posicion){
         try {
-                $query = "INSERT INTO notas(cod_cur,descrip_nota,porcentaje,posicion) values ($cod_cur,'$descrip_nota',$porcentaje,$posicion);";
+                $query = "INSERT INTO notas(cod_cur,descrip_nota,porcentaje,posicion)
+                          values ($cod_cur,'$descrip_nota',$porcentaje,$posicion);";
                 $stmt = $this->conn->prepare($query);    
                 return $stmt->execute();
         }
@@ -210,7 +232,10 @@ class modelGeneral {
 
     public function validarPosicion($cod_cur,$posicion){
 
-        $query = $this->conn->query("select count(*) from notas where cod_cur = $cod_cur and posicion = $posicion;");
+        $query = $this->conn->query("SELECT count(*)
+                                     from notas
+                                     where cod_cur = $cod_cur 
+                                     and posicion = $posicion;");
         
         foreach($query as $row){
             $count = $row[0];
@@ -225,7 +250,9 @@ class modelGeneral {
 
     public function validarCodEst($cod_est){
 
-        $query = $this->conn->query("select count(*) from estudiantes where cod_est = $cod_est;");
+        $query = $this->conn->query("SELECT count(*)
+                                     from estudiantes
+                                      where cod_est = $cod_est;");
         
         foreach($query as $row){
             $count = $row[0];
@@ -240,7 +267,11 @@ class modelGeneral {
 
     public function validarPosicionActualizar($cod_cur,$posicion,$cod_nota){
 
-        $query = $this->conn->query("select count(*) from notas where cod_cur = $cod_cur and posicion = $posicion and nota != $cod_nota");
+        $query = $this->conn->query("SELECT count(*)
+                                     from notas
+                                     where cod_cur = $cod_cur
+                                     and posicion = $posicion
+                                     and nota != $cod_nota");
         
         foreach($query as $row){
             $count = $row[0];
@@ -255,14 +286,20 @@ class modelGeneral {
 
     public function eliminarNota($cod_nota) {
         // Preparar la consulta de inserción
-        $query = "DELETE FROM notas WHERE nota = '$cod_nota'";
+        $query = "DELETE FROM notas
+                  WHERE nota = '$cod_nota'";
         $stmt = $this->conn->prepare($query);
         return $stmt->execute();
     }
 
     public function actualizarNota($cod_nota,$cod_cur,$descrip_nota,$porcentaje,$posicion) {
         // Preparar la consulta de inserción
-        $query = "UPDATE notas SET cod_cur = $cod_cur , descrip_nota = '$descrip_nota', porcentaje = $porcentaje, posicion = $posicion WHERE nota = $cod_nota";
+        $query = "UPDATE notas 
+                  SET cod_cur = $cod_cur , 
+                  descrip_nota = '$descrip_nota', 
+                  porcentaje = $porcentaje, 
+                  posicion = $posicion 
+                  WHERE nota = $cod_nota";
         $stmt = $this->conn->prepare($query);
         return $stmt->execute();
     }
@@ -293,7 +330,8 @@ class modelGeneral {
     public function registgrarCalificacion($valor,$nota,$cod_insc){
         try {
             $fecha = date('Y-m-d');
-            $query = "INSERT into calificaciones (valor,fecha,nota,cod_insc) values ($valor,'$fecha',$nota,$cod_insc);";
+            $query = "INSERT into calificaciones (valor,fecha,nota,cod_insc)
+                      values ($valor,'$fecha',$nota,$cod_insc);";
             $stmt = $this->conn->prepare($query);    
             return $stmt->execute();
             }
@@ -306,14 +344,17 @@ class modelGeneral {
 
     public function eliminarCalificacion($cod_cal) {
         // Preparar la consulta de inserción
-        $query = "DELETE FROM calificaciones WHERE cod_cal = '$cod_cal'";
+        $query = "DELETE FROM calificaciones
+                  WHERE cod_cal = '$cod_cal'";
         $stmt = $this->conn->prepare($query);
         return $stmt->execute();
     }
 
     public function validarCalificacion($cod_insc){
 
-        $query = $this->conn->query("select count(*) from calificaciones where cod_insc = $cod_insc;");
+        $query = $this->conn->query("SELECT count(*)
+                                     from calificaciones 
+                                     where cod_insc = $cod_insc;");
         
         foreach($query as $row){
             $count = $row[0];
@@ -328,7 +369,9 @@ class modelGeneral {
 
     public function getNombNota($cod_nota){
         
-        $query = $this->conn->query("SELECT descrip_nota from notas  where nota = $cod_nota;");
+        $query = $this->conn->query("SELECT descrip_nota
+                                     from notas  
+                                     where nota = $cod_nota;");
        
         foreach($query as $row){
             $nomb_cur = $row[0];
@@ -339,7 +382,10 @@ class modelGeneral {
 
     public function validarValor($cod_insc, $nota){
 
-        $query = $this->conn->query("select count(*) from calificaciones where cod_insc = $cod_insc and nota = $nota;");
+        $query = $this->conn->query("SELECT count(*)
+                                     from calificaciones
+                                     where cod_insc = $cod_insc
+                                     and nota = $nota;");
         
         foreach($query as $row){
             $count = $row[0];

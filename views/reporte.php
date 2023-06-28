@@ -2,8 +2,7 @@
 <?php
 require_once "../controllers/controllerGeneral.php";
     $obj=new controllerGeneral();
-    $estudiantes=$obj->obtenerEstudiantesPorCurso($_POST['cod_cur']);
-    $notas=$obj->obtenerNotasPorCurso($_POST['cod_cur']);
+    $date=$obj->getAllcursos();    
 ?>
 
 <!DOCTYPE html>
@@ -13,29 +12,8 @@ require_once "../controllers/controllerGeneral.php";
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <title>Menú</title>
+  <title>Menú Lateral</title>
   <style>
-
-    body{
-      font-family: Arial, sans-serif;
-
-    }
-     .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        select, input[type="text"], input[type="date"] {
-            width: 200px;
-            padding: 5px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
   
   body {
   margin: 0;
@@ -96,31 +74,89 @@ require_once "../controllers/controllerGeneral.php";
   margin-left: 240px;
   padding: 20px;
 }
-.table-container {
-  margin-bottom: 20px;
+
+        .contenedor {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            margin-top:20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            padding: 12px 20px;
+            text-decoration: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .grid-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* Divide el contenedor en 4 columnas iguales */
+  gap: 20px; /* Espacio entre los elementos del grid */
 }
 
-.data-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.data-table th,
-.data-table td {
-  padding: 8px;
+.grid-item {
+  background-color: #f2f2f2;
+  padding: 20px;
   border: 1px solid #ccc;
-}
-
-.pagination-container {
   text-align: center;
-  margin-top: 10px;
 }
 
-.pagination-container button {
-  margin: 0 5px;
+.student-count {
+  font-size: 18px;
 }
+.container {
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.page-title {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.page-description {
+  font-size: 16px;
+  color: #666;
+}
+    </style>
+
 </style>
 </head>
+
 <body>
   <div class="sidebar">
     <div class="sidebar-header">
@@ -136,82 +172,36 @@ require_once "../controllers/controllerGeneral.php";
   </div>
 
   <main class="content">
-    <div class="container">
-      <h2 class="page-title" style="font-family: Arial, sans-serif; font-size:2rem" >Listado de Estudiantes</h2>
-      <br>
-      <div class="row row-cols-1 g-4">
-  
-      <div class="table-container">
-      <table class="data-table">
-  <thead>
-    <tr>
-      <th></th>
-      <?php foreach ($notas as $nota): ?>
-        <th><?= $nota['descrip_nota'] ?></th>
-      <?php endforeach; ?>
-      <th>Definitiva</th>
-    </tr>
-    <tr>
-      <th>Codigo</th>
-      <?php foreach ($notas as $nota): ?>
-        <th><?= $nota['porcentaje']*100 . "%" ?></th>
-      <?php endforeach; ?>
-      <?php
-        $sumaPorcentajes = 0;
-        foreach ($notas as $nota):
-            $porcentaje = $nota['porcentaje'] * 100;
-            $sumaPorcentajes += $porcentaje;
-            ?>
-        <?php endforeach; ?>
-        <th><?= $sumaPorcentajes . "%" ?></th>
-    </tr>
-  </thead>
-  <tbody>
-    <?php foreach ($estudiantes as $cod_est => $estudiante): ?>
-      <tr>
-        <td><?= $cod_est ?></td>
-        <?php foreach ($notas as $nota): ?>
-          <td>
-            <?php $descrip_nota = $nota['descrip_nota']; ?>
-            <?php if (isset($estudiante['notas'][$descrip_nota])): ?>
-              <?php $nota_estudiante = $estudiante['notas'][$descrip_nota]['valor']; ?>
-              <?php $porcentaje = $nota['porcentaje'];?>
-              <?= $nota_estudiante?><br>
-            <?php endif; ?>
-          </td>
-        <?php endforeach; ?>
-        <?php
-            $definitiva = 0;
-            foreach ($notas as $nota):
-              $descrip_nota = $nota['descrip_nota'];
-              if (isset($estudiante['notas'][$descrip_nota])) {
-                $nota_estudiante = $estudiante['notas'][$descrip_nota]['valor'];
-                $porcentaje = $nota['porcentaje'];
-                $definitiva += $nota_estudiante * $porcentaje;
-              }
-          ?>
-          <?php endforeach; ?>
-          <td><?= $definitiva ?></td>
-      </tr>
-    <?php endforeach; ?>
-  </tbody>
-</table>
-</div>
+    
+<div class="row row-cols-1 g-4">
+      
+<div class="contenedor">
+        <h1>Reporte</h1>
+        <form action="listaReporte.php" method="POST">
+        <label for="cod_cur">Seleccione un curso:</label>
+            <select name="cod_cur">
+                <?php
+                $tables = $obj->getAllcursos();
+                foreach ($tables as $row) {
+                    echo "<option value='" . $row[0] . "'>" . $row[1] . "</option>";
+                }
+                ?>
+            </select>
+            <br>
+            <label for="year">Escriba el año:</label>
+            <input type="text" name="year" placeholder="Año" required>
+            <br>
+            <label for="periodo">Seleccione un período:</label>
+            <select name="periodo">
+                <option value="1">Periodo 1</option>
+                <option value="2">Periodo 2</option>
+            </select>
+            <br><br>
+            <input type="submit" value="Ver Reporte">
+        </form>
+  </div>
 
-</div>
-<br><br>
-<input type='button' name='Volver Atrás' value='Volver Atrás' onclick="location.href='http://localhost/app/views/SelectCurso.php'"><br>
-
-<form action="generar_reporte.php" method="POST" target="_blank">
-  <input type="hidden" name="cod_cur" value="<?=$_POST['cod_cur']?>">
-  <input type="submit" value="Generar Reporte">
-</form>
-
-<br>
-</div>
-    </div>
+  <br><br>
   </main>
-<br><br><br>
-
 </body>
 </html>

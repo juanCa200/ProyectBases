@@ -177,7 +177,7 @@ require_once "../controllers/controllerGeneral.php";
 <div class="row row-cols-1 g-4">
       
 <div class="contenedor">
-        <h1>Formulario</h1>
+        <h1>Listados</h1>
         <form action="listado.php" method="POST">
             <label for="cod_cur">Seleccione un curso:</label>
             <select name="cod_cur">
