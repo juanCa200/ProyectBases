@@ -217,7 +217,24 @@ class modelGeneral {
     }
 
     public function getCalificaciones($cod_nota,$cod_cur){
-        $query = "select i.cod_est,e.nomb_est,c.valor,c.nota,i.cod_insc,c.cod_cal from inscripciones i left join calificaciones c on i.cod_insc = c.cod_insc join estudiantes e on e.cod_est = i.cod_est where cod_cur = $cod_cur and nota = $cod_nota or nota is null and cod_cur = $cod_cur order by e.nomb_est;";
+        $query =   "SELECT i.cod_est, e.nomb_est, nc.valor, n.nota, i.cod_insc, nc.cod_cal
+                    FROM (
+                        SELECT DISTINCT cod_est, cod_cur, cod_insc
+                        FROM inscripciones
+                        WHERE cod_cur = $cod_cur
+                    ) i
+                    JOIN estudiantes e ON e.cod_est = i.cod_est
+                    LEFT JOIN (
+                        SELECT c.cod_insc, c.valor, c.nota, c.cod_cal
+                        FROM calificaciones c
+                        JOIN notas n ON n.nota = c.nota
+                        WHERE n.nota = $cod_nota
+                    ) nc ON nc.cod_insc = i.cod_insc
+                    JOIN notas n ON n.nota = nc.nota OR nc.nota IS NULL
+                    where n.nota = $cod_nota
+                    ORDER BY e.nomb_est;
+
+";
         $stmt = $this->conn->prepare($query);
         return($stmt->execute()) ? $stmt->fetchAll(): false;
     }
