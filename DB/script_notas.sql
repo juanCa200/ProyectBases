@@ -36,3 +36,33 @@ cod_insc int not null,
 constraint fk_notas foreign key(nota) references notas(nota) on update cascade on delete cascade,
 constraint fk_inscripcion foreign key(cod_insc) references inscripciones(cod_insc) on update cascade on delete cascade
 );
+
+create table eventos(
+fecha date default NOW(),
+hora time default NOW(),
+valor_anterior float,
+valor_nuevo float,
+comando text);
+
+create or replace function trigger_eventos()
+returns trigger as $$
+begin
+    if TG_OP = 'INSERT' then
+        insert into eventos (valor_anterior, valor_nuevo, comando)
+        values (NULL, NEW.valor, TG_OP);
+    elsif TG_OP = 'UPDATE' then
+        insert into eventos (valor_anterior, valor_nuevo, comando)
+        values (OLD.valor, NEW.valor, TG_OP);
+    elsif TG_OP = 'DELETE' then
+        insert into eventos (valor_anterior, valor_nuevo, comando)
+        VALUES (OLD.valor, NULL, TG_OP);
+    end if;
+
+    return NEW;
+end;
+$$ LANGUAGE plpgsql;
+
+create or replace trigger trigger_eventos
+after insert or update or delete on calificaciones
+for each row
+execute function trigger_eventos();
